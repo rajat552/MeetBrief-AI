@@ -1,12 +1,15 @@
 # MeetBrief AI — Autonomous Meeting Intelligence
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Deployment-emerald?style=for-the-badge&logo=render)](https://meetbrief-ai-j8yo.onrender.com)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com/)
 [![React 18](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://react.dev/)
-[![Bifrost Gateway](https://img.shields.io/badge/Bifrost_Gateway-v2.3.1-6366f1.svg)](https://github.com/maximhq/bifrost)
+[![Render](https://img.shields.io/badge/Render-Deployed_Live-brightgreen.svg)](https://meetbrief-ai-j8yo.onrender.com)
 [![Tests: 44 Passed](https://img.shields.io/badge/Tests-44%20Passed-brightgreen.svg)](tests/)
 
+> 🌐 **Live Web Application**: [https://meetbrief-ai-j8yo.onrender.com](https://meetbrief-ai-j8yo.onrender.com)  
 > **Targeting Problem Statement 05 — Geek Room Global AI Hackathon 2026**  
 > Autonomous, evidence-grounded meeting intelligence delivering a scannable, one-page executive briefing (< 600 words) in under 2 minutes.
 
