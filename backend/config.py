@@ -66,6 +66,10 @@ class Settings(BaseSettings):
         default="",
         description="Direct Groq API key used when Bifrost is offline/disabled"
     )
+    GEMINI_API_KEY: str = Field(
+        default="",
+        description="Direct Google Gemini API key used when Bifrost is offline/disabled"
+    )
 
     # --------------------------------------------------------------------------
     # Server & Runtime Configuration
@@ -96,6 +100,10 @@ class Settings(BaseSettings):
     def is_groq_configured(self) -> bool:
         """Checks if direct Groq API key is set."""
         return bool(self.GROQ_API_KEY and self.GROQ_API_KEY.startswith("gsk_"))
+
+    def is_gemini_configured(self) -> bool:
+        """Checks if direct Gemini API key is set."""
+        return bool(self.GEMINI_API_KEY and len(self.GEMINI_API_KEY) > 10)
 
     def is_tavily_configured(self) -> bool:
         """Checks if Tavily search API key is set."""
