@@ -1,19 +1,7 @@
 # ------------------------------------------------------------------------------
-# Stage 1: Build React 18 UI
+# MeetBrief AI — Production Docker Image
 # ------------------------------------------------------------------------------
-FROM node:20-alpine AS frontend-builder
-WORKDIR /build
-
-COPY ui/package*.json ./
-RUN npm install
-
-COPY ui/ ./
-RUN npm run build
-
-# ------------------------------------------------------------------------------
-# Stage 2: Python FastAPI Backend & Unified Server
-# ------------------------------------------------------------------------------
-FROM python:3.11-slim AS production
+FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -23,7 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Install system dependencies if required
+# Install curl for healthcheck
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -32,12 +20,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
+# Copy backend application
 COPY backend/ ./backend/
 COPY app.py ./
 
-# Copy compiled frontend from Stage 1 into ui/dist
-COPY --from=frontend-builder /build/dist ./ui/dist/
+# Copy pre-compiled frontend distribution
+COPY ui/dist/ ./ui/dist/
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
@@ -45,5 +33,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
 
 EXPOSE 5000
 
-# Run FastAPI app
 CMD ["python", "app.py"]
