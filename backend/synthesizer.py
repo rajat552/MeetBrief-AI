@@ -60,7 +60,12 @@ class ExecutiveSynthesizer:
         inference_route = gw_status.mode
 
         # If gateway or direct provider is available, use LLM to craft high-impact text
-        if gw_status.is_healthy or self.gateway.config.is_openai_configured() or self.gateway.config.is_groq_configured():
+        if (
+            gw_status.is_healthy
+            or self.gateway.config.is_openai_configured()
+            or self.gateway.config.is_groq_configured()
+            or self.gateway.config.is_gemini_configured()
+        ):
             prompt = self._build_synthesis_prompt(request, in_window_findings, verified_claims)
             try:
                 response = await self.gateway.complete(
