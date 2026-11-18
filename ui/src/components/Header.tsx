@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, AlertCircle, Sparkles, Cpu, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Zap, Sparkles, Cpu, ExternalLink } from 'lucide-react';
 import { GatewayStatusEvent } from '../types/briefing';
 
 interface HeaderProps {
@@ -37,9 +37,9 @@ export const Header: React.FC<HeaderProps> = ({ gatewayStatus }) => {
                 <span>Bifrost AI Gateway (:8080)</span>
               </div>
             ) : (
-              <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-medium" title={gatewayStatus.reason || "Gateway Offline"}>
-                <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
-                <span>Inference: Direct Provider Fallback</span>
+              <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-medium" title={gatewayStatus.reason || "Direct Provider Active"}>
+                <Zap className="h-3.5 w-3.5 text-indigo-600" />
+                <span>Inference: Direct Provider (Active)</span>
               </div>
             )
           ) : (
