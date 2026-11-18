@@ -313,6 +313,14 @@ class BifrostClient:
             }
             actual_model = clean_model if not is_groq else "gpt-4o-mini"
             provider_name = "openai"
+        elif self.config.is_gemini_configured():
+            endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+            headers = {
+                "Authorization": f"Bearer {self.config.GEMINI_API_KEY}",
+                "Content-Type": "application/json"
+            }
+            actual_model = "gemini-flash-latest"
+            provider_name = "gemini"
         else:
             # Deterministic offline mock fallback if no direct keys are set
             elapsed_ms = (time.perf_counter() - start_time) * 1000
@@ -402,15 +410,29 @@ class BifrostClient:
             }
             # Route to direct provider stream
             clean_model = target_model.split("/")[-1] if "/" in target_model else target_model
-            endpoint = "https://api.openai.com/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {self.config.OPENAI_API_KEY}",
-                "Content-Type": "application/json"
-            }
+            if self.config.is_gemini_configured():
+                endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {self.config.GEMINI_API_KEY}",
+                    "Content-Type": "application/json"
+                }
+                clean_model = "gemini-flash-latest"
+            elif self.config.is_groq_configured() and ("llama" in clean_model.lower() or "mixtral" in clean_model.lower()):
+                endpoint = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {self.config.GROQ_API_KEY}",
+                    "Content-Type": "application/json"
+                }
+            else:
+                endpoint = "https://api.openai.com/v1/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {self.config.OPENAI_API_KEY}",
+                    "Content-Type": "application/json"
+                }
             mode_label = "fallback_direct"
 
         payload = {
-            "model": target_model.split("/")[-1] if "/" in target_model else target_model,
+            "model": clean_model,
             "messages": messages,
             "temperature": temperature,
             "stream": True
