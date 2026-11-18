@@ -10,6 +10,7 @@ def test_settings_defaults():
     s = Settings(
         TAVILY_API_KEY="tvly-mock",
         BIFROST_VIRTUAL_KEY="sk-bf-test",
+        BIFROST_ENABLED=True,
         OPENAI_API_KEY="sk-test",
         GROQ_API_KEY="gsk_test"
     )
