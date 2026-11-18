@@ -5,7 +5,10 @@ MeetBrief AI — LangGraph Multi-Agent Orchestrator & Safe Streaming Pipeline
 import asyncio
 import json
 import logging
-from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple
+import operator
+from typing import Annotated, Any, AsyncGenerator, Dict, List, Optional, Tuple, TypedDict
+
+from langgraph.graph import StateGraph, START, END
 
 from backend.config import Settings, settings
 from backend.gateway import BifrostClient
@@ -30,11 +33,25 @@ from backend.verifier import EvidenceGroundingEngine
 logger = logging.getLogger(__name__)
 
 
+class OrchestratorGraphState(TypedDict):
+    """
+    Typed and validated LangGraph state schema.
+    Uses operator.add reducers for safe concurrent updates across parallel branches.
+    """
+    request: ManualMeetingRequest
+    plan: Optional[ResearchPlan]
+    in_window_findings: Annotated[List[ResearchFinding], operator.add]
+    undated_findings: Annotated[List[ResearchFinding], operator.add]
+    verified_claims: List[VerifiedClaim]
+    briefing: Optional[OnePageBriefing]
+    errors: Annotated[List[str], operator.add]
+
+
 class MeetBriefOrchestrator:
     """
-    Coordinates the complete multi-agent pipeline:
+    Coordinates the complete multi-agent pipeline using an asynchronous LangGraph graph:
     1. Input normalization & temporal date bounding ([min(T_meet, T_curr)-30d, min(T_meet, T_curr)])
-    2. Parallel 5-branch research fan-out via asyncio.gather with deduplication
+    2. Parallel 5-branch research fan-out with state reduction
     3. Deterministic evidence grounding & claim verification
     4. One-page executive briefing synthesis (< 600 words)
     5. Safe SSE event streaming (strictly withholding private model reasoning)
@@ -47,30 +64,147 @@ class MeetBriefOrchestrator:
         self.tavily = TavilyEngine(cfg=self.config, dedup=self.dedup)
         self.synthesizer = ExecutiveSynthesizer(gateway_client=self.gateway)
 
-        # 5 Research Agents
+        # 5 Specialized Research Branch Agents
         self.agent_company = CompanyResearchAgent(self.tavily)
         self.agent_people = PeopleResearchAgent(self.tavily)
         self.agent_news = NewsResearchAgent(self.tavily)
         self.agent_launches = LaunchesResearchAgent(self.tavily)
         self.agent_hiring = HiringResearchAgent(self.tavily)
 
+        # Build and compile the LangGraph workflow
+        self.graph = self._build_graph()
+
+    def _build_graph(self):
+        """Constructs and compiles the asynchronous LangGraph StateGraph."""
+        builder = StateGraph(OrchestratorGraphState)
+
+        # Node 1: Temporal Planning & Query Disjointness
+        async def plan_node(state: OrchestratorGraphState) -> Dict[str, Any]:
+            plan = SharedQueryPlanner.build_plan(state["request"])
+            await self.dedup.clear()
+            return {"plan": plan}
+
+        # Branch 1: Static Company Background
+        async def branch_company(state: OrchestratorGraphState) -> Dict[str, Any]:
+            try:
+                in_win, undated = await self.agent_company.execute(state["request"], state["plan"])
+                return {"in_window_findings": in_win, "undated_findings": undated}
+            except Exception as e:
+                logger.error(f"Branch company_background error: {e}")
+                return {"errors": [f"company_background: {str(e)}"]}
+
+        # Branch 2: Attendee Intelligence
+        async def branch_people(state: OrchestratorGraphState) -> Dict[str, Any]:
+            try:
+                in_win, undated = await self.agent_people.execute(state["request"], state["plan"])
+                return {"in_window_findings": in_win, "undated_findings": undated}
+            except Exception as e:
+                logger.error(f"Branch attendee_dossier error: {e}")
+                return {"errors": [f"attendee_dossier: {str(e)}"]}
+
+        # Branch 3: Recent 30-Day Corporate News
+        async def branch_news(state: OrchestratorGraphState) -> Dict[str, Any]:
+            try:
+                in_win, undated = await self.agent_news.execute(state["request"], state["plan"])
+                return {"in_window_findings": in_win, "undated_findings": undated}
+            except Exception as e:
+                logger.error(f"Branch news error: {e}")
+                return {"errors": [f"news: {str(e)}"]}
+
+        # Branch 4: 30-Day Product Releases & Roadmaps
+        async def branch_launches(state: OrchestratorGraphState) -> Dict[str, Any]:
+            try:
+                in_win, undated = await self.agent_launches.execute(state["request"], state["plan"])
+                return {"in_window_findings": in_win, "undated_findings": undated}
+            except Exception as e:
+                logger.error(f"Branch launches error: {e}")
+                return {"errors": [f"launches: {str(e)}"]}
+
+        # Branch 5: 30-Day Hiring & Organizational Expansion
+        async def branch_hiring(state: OrchestratorGraphState) -> Dict[str, Any]:
+            try:
+                in_win, undated = await self.agent_hiring.execute(state["request"], state["plan"])
+                return {"in_window_findings": in_win, "undated_findings": undated}
+            except Exception as e:
+                logger.error(f"Branch hiring error: {e}")
+                return {"errors": [f"hiring: {str(e)}"]}
+
+        # Node 3: Evidence Grounding & Claim Verification
+        async def verify_node(state: OrchestratorGraphState) -> Dict[str, Any]:
+            claims = EvidenceGroundingEngine.ground_findings(state.get("in_window_findings", []))
+            return {"verified_claims": claims}
+
+        # Node 4: Scannable Briefing Synthesis (< 600 words)
+        async def synthesize_node(state: OrchestratorGraphState) -> Dict[str, Any]:
+            briefing = await self.synthesizer.synthesize(
+                request=state["request"],
+                in_window_findings=state.get("in_window_findings", []),
+                undated_findings=state.get("undated_findings", []),
+                verified_claims=state.get("verified_claims", [])
+            )
+            return {"briefing": briefing}
+
+        # Register nodes in graph
+        builder.add_node("plan", plan_node)
+        builder.add_node("branch_company", branch_company)
+        builder.add_node("branch_people", branch_people)
+        builder.add_node("branch_news", branch_news)
+        builder.add_node("branch_launches", branch_launches)
+        builder.add_node("branch_hiring", branch_hiring)
+        builder.add_node("verify", verify_node)
+        builder.add_node("synthesize", synthesize_node)
+
+        # Wire graph topology
+        builder.add_edge(START, "plan")
+
+        # Parallel fan-out
+        builder.add_edge("plan", "branch_company")
+        builder.add_edge("plan", "branch_people")
+        builder.add_edge("plan", "branch_news")
+        builder.add_edge("plan", "branch_launches")
+        builder.add_edge("plan", "branch_hiring")
+
+        # Parallel fan-in to verification
+        builder.add_edge("branch_company", "verify")
+        builder.add_edge("branch_people", "verify")
+        builder.add_edge("branch_news", "verify")
+        builder.add_edge("branch_launches", "verify")
+        builder.add_edge("branch_hiring", "verify")
+
+        # Verification to synthesis to end
+        builder.add_edge("verify", "synthesize")
+        builder.add_edge("synthesize", END)
+
+        return builder.compile()
+
+    async def invoke_graph(self, request: ManualMeetingRequest) -> OrchestratorGraphState:
+        """Invokes the compiled LangGraph workflow end-to-end."""
+        initial_state: OrchestratorGraphState = {
+            "request": request,
+            "plan": None,
+            "in_window_findings": [],
+            "undated_findings": [],
+            "verified_claims": [],
+            "briefing": None,
+            "errors": [],
+        }
+        return await self.graph.ainvoke(initial_state)
+
     async def execute_stream(
         self,
         request: ManualMeetingRequest
     ) -> AsyncGenerator[str, None]:
         """
-        Executes the end-to-end agent workflow, yielding SSE frames:
+        Executes the end-to-end agent workflow, yielding Safe SSE frames:
         'event: <event_type>\ndata: <json_data>\n\n'
+        Zero private reasoning or chain-of-thought tokens are emitted.
         """
-        # Helper to format SSE message
         def sse_frame(event_type: str, data: Any) -> str:
             payload = data if isinstance(data, (dict, list, str, int, float, bool)) else data.model_dump()
             return f"event: {event_type}\ndata: {json.dumps(payload)}\n\n"
 
         try:
-            # ------------------------------------------------------------------
             # Stage 0: Gateway Health Check & Inference Route Status
-            # ------------------------------------------------------------------
             gw_status = await self.gateway.check_health()
             yield sse_frame("gateway_status", {
                 "mode": gw_status.mode,
@@ -79,9 +213,7 @@ class MeetBriefOrchestrator:
                 "available_models": gw_status.available_models
             })
 
-            # ------------------------------------------------------------------
             # Stage 1: Context Normalization & Temporal Date Bounding
-            # ------------------------------------------------------------------
             yield sse_frame("stage_update", {
                 "stage": "query_planning",
                 "status": "active",
@@ -97,13 +229,11 @@ class MeetBriefOrchestrator:
                 "description": f"Target interval: {plan.start_date_str} to {plan.end_date_str} (UTC)"
             })
 
-            # ------------------------------------------------------------------
             # Stage 2: Parallel 5-Branch Research Fan-Out
-            # ------------------------------------------------------------------
             yield sse_frame("stage_update", {
                 "stage": "parallel_research",
                 "status": "active",
-                "description": "Executing 5 disjoint research branches concurrently..."
+                "description": "Executing 5 disjoint research branches concurrently via LangGraph..."
             })
 
             yield sse_frame("tool_status", {
@@ -112,7 +242,6 @@ class MeetBriefOrchestrator:
                 "status": "running"
             })
 
-            # Execute all 5 branches concurrently
             results: List[Any] = await asyncio.gather(
                 self.agent_company.execute(request, plan),
                 self.agent_people.execute(request, plan),
@@ -124,7 +253,6 @@ class MeetBriefOrchestrator:
 
             in_window_findings: List[ResearchFinding] = []
             undated_findings: List[ResearchFinding] = []
-
             branch_names = ["company_background", "attendee_dossier", "news", "launches", "hiring"]
 
             for idx, res in enumerate(results):
@@ -152,9 +280,7 @@ class MeetBriefOrchestrator:
                 "description": f"Retrieved {len(in_window_findings)} verified in-window signals and {len(undated_findings)} undated records."
             })
 
-            # ------------------------------------------------------------------
             # Stage 3: Deterministic Evidence Grounding & Claim Verification
-            # ------------------------------------------------------------------
             yield sse_frame("stage_update", {
                 "stage": "evidence_verification",
                 "status": "active",
@@ -180,9 +306,7 @@ class MeetBriefOrchestrator:
                 "description": f"Verified {verified_count} primary, {reported_count} secondary claims ({conflicted_count} conflicts detected)."
             })
 
-            # ------------------------------------------------------------------
             # Stage 4: Executive Synthesis & Briefing Streaming
-            # ------------------------------------------------------------------
             yield sse_frame("stage_update", {
                 "stage": "dossier_synthesis",
                 "status": "active",
@@ -209,9 +333,7 @@ class MeetBriefOrchestrator:
                 "description": "One-Page Executive Briefing ready."
             })
 
-            # ------------------------------------------------------------------
             # Stage 5: Complete Event with Structured Payload
-            # ------------------------------------------------------------------
             yield sse_frame("complete", briefing.model_dump())
 
         except Exception as e:
