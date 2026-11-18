@@ -7,7 +7,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com/)
 [![React 18](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://react.dev/)
 [![Render](https://img.shields.io/badge/Render-Deployed_Live-brightgreen.svg)](https://meetbrief-ai-j8yo.onrender.com)
-[![Tests: 44 Passed](https://img.shields.io/badge/Tests-44%20Passed-brightgreen.svg)](tests/)
+[![Tests: 49 Passed](https://img.shields.io/badge/Tests-49%20Passed-brightgreen.svg)](tests/)
 
 > 🌐 **Live Web Application**: [https://meetbrief-ai-j8yo.onrender.com](https://meetbrief-ai-j8yo.onrender.com)  
 > **Targeting Problem Statement 05 — Geek Room Global AI Hackathon 2026**  
@@ -202,9 +202,10 @@ pytest tests/ -v
 | Tavily Search & Bounding | `tests/test_tavily_engine.py` | 2 | ✅ Passed |
 | Evidence Grounding | `tests/test_verifier.py` | 5 | ✅ Passed |
 | Executive Synthesis | `tests/test_synthesizer.py` | 1 | ✅ Passed |
+| LangGraph Orchestration | `tests/test_agent_graph.py` | 5 | ✅ Passed |
 | FastAPI & SSE Endpoints | `tests/test_api_endpoints.py` | 3 | ✅ Passed |
 | Security & Zero Leakage | `tests/test_security.py` | 11 | ✅ Passed |
-| **Total Test Suite** | **All Modules** | **44** | **100% Pass** |
+| **Total Test Suite** | **All Modules** | **49** | **100% Pass** |
 
 ---
 
