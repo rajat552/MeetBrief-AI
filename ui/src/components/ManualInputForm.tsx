@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, User, Clock, Target, Calendar, ArrowRight } from 'lucide-react';
+import { Building2, User, Clock, Target, Calendar, ArrowRight, Briefcase, Sparkles, Check } from 'lucide-react';
 import { ManualMeetingRequest } from '../types/briefing';
 
 interface ManualInputFormProps {
@@ -18,6 +18,7 @@ export const ManualInputForm: React.FC<ManualInputFormProps> = ({
   const [role, setRole] = useState('CEO & Co-founder');
   const [datetime, setDatetime] = useState('2026-11-20 14:00 UTC');
   const [goal, setGoal] = useState('Explore enterprise AI payment infrastructure and agentic commerce partnership');
+  const [activePreset, setActivePreset] = useState<string>('Stripe');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,59 +33,105 @@ export const ManualInputForm: React.FC<ManualInputFormProps> = ({
     });
   };
 
-  const loadPreset = (c: string, a: string, r: string, g: string) => {
+  const loadPreset = (c: string, a: string, r: string, g: string, key: string) => {
     setCompany(c);
     setAttendee(a);
     setRole(r);
     setGoal(g);
+    setActivePreset(key);
   };
 
   return (
-    <div className="glass-card p-6 sm:p-8 no-print">
-      <div className="flex items-center justify-between mb-6">
+    <div id="meeting-input-form" className="tavily-card p-6 sm:p-8 mb-6 no-print">
+      {/* Card Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-[#EAE4D8]">
         <div>
-          <h2 className="text-xl font-bold text-theme-primary tracking-tight flex items-center gap-2">
-            <span>Prepare Meeting Intelligence</span>
-          </h2>
-          <p className="text-sm text-theme-muted mt-1">
-            Generate an evidence-grounded, one-page executive brief covering the preceding 30 days.
+          <div className="flex items-center space-x-2 mb-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#2E5A44] bg-[#EAF2EC] px-2 py-0.5 rounded-md">
+              Step 1
+            </span>
+            <h3 className="text-lg font-bold text-[#18181B] tracking-tight">
+              Meeting Context &amp; Intelligence Target
+            </h3>
+          </div>
+          <p className="text-xs text-[#71717A]">
+            Define meeting parameters to compute the rolling 30-day temporal research boundary.
           </p>
         </div>
 
-        {/* Secondary Calendar Modal Trigger */}
+        {/* Secondary Calendar Trigger */}
         <button
           type="button"
           onClick={onOpenCalendar}
-          className="text-xs font-medium text-theme-text bg-theme-glass hover:bg-[rgba(255,240,225,0.1)] px-3 py-2 rounded-xl border border-theme-glass-border transition-colors flex items-center gap-1.5 backdrop-blur-sm"
+          className="tavily-btn-secondary px-3.5 py-1.5 text-xs flex items-center justify-center gap-1.5 self-start sm:self-auto"
         >
-          <Calendar className="h-3.5 w-3.5 text-theme-muted" />
+          <Calendar className="h-3.5 w-3.5 text-[#2E5A44]" />
           <span>Calendar Sync</span>
         </button>
       </div>
 
-      {/* Preset Quick Fill Chips */}
-      <div className="mb-6 flex flex-wrap items-center gap-2 text-xs">
-        <span className="text-theme-muted font-medium">Quick Demo Targets:</span>
+      {/* Preset Target Quick Fill Chips (Tavily Reference Pattern) */}
+      <div className="mb-6 p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE4D8] flex flex-wrap items-center gap-2">
+        <span className="text-xs font-semibold text-[#52525B] mr-1">Quick Presets:</span>
         <button
           type="button"
-          onClick={() => loadPreset('Stripe', 'Patrick Collison', 'CEO & Co-founder', 'Strategic Agentic Payment Infrastructure Review')}
-          className="px-2.5 py-1 rounded-lg bg-theme-glass text-theme-accent hover:border-theme-accent border border-theme-glass-border font-medium transition-all backdrop-blur-sm"
+          onClick={() =>
+            loadPreset(
+              'Stripe',
+              'Patrick Collison',
+              'CEO & Co-founder',
+              'Explore enterprise AI payment infrastructure and agentic commerce partnership',
+              'Stripe'
+            )
+          }
+          className={`px-3 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+            activePreset === 'Stripe'
+              ? 'bg-[#18181B] text-white shadow-2xs'
+              : 'bg-white text-[#18181B] border border-[#EAE4D8] hover:bg-[#F4F0E8]'
+          }`}
         >
-          Stripe (Patrick Collison)
+          {activePreset === 'Stripe' && <Check className="h-3 w-3 text-[#4E876F]" />}
+          <span>Stripe (Patrick Collison)</span>
         </button>
         <button
           type="button"
-          onClick={() => loadPreset('Databricks', 'Ali Ghodsi', 'CEO & Co-founder', 'Data Intelligence & Generative AI Platform Strategy')}
-          className="px-2.5 py-1 rounded-lg bg-theme-glass text-theme-accent hover:border-theme-accent border border-theme-glass-border font-medium transition-all backdrop-blur-sm"
+          onClick={() =>
+            loadPreset(
+              'Databricks',
+              'Ali Ghodsi',
+              'CEO & Co-founder',
+              'Data Intelligence & Generative AI Platform Strategy Evaluation',
+              'Databricks'
+            )
+          }
+          className={`px-3 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+            activePreset === 'Databricks'
+              ? 'bg-[#18181B] text-white shadow-2xs'
+              : 'bg-white text-[#18181B] border border-[#EAE4D8] hover:bg-[#F4F0E8]'
+          }`}
         >
-          Databricks (Ali Ghodsi)
+          {activePreset === 'Databricks' && <Check className="h-3 w-3 text-[#4E876F]" />}
+          <span>Databricks (Ali Ghodsi)</span>
         </button>
         <button
           type="button"
-          onClick={() => loadPreset('Tavily', 'Roy Elkabetz', 'CEO', 'Autonomous Search Integration for Agentic Workflows')}
-          className="px-2.5 py-1 rounded-lg bg-theme-glass text-theme-accent hover:border-theme-accent border border-theme-glass-border font-medium transition-all backdrop-blur-sm"
+          onClick={() =>
+            loadPreset(
+              'Tavily',
+              'Roy Elkabetz',
+              'CEO',
+              'Autonomous Search Integration for Agentic Workflows & MCP Server',
+              'Tavily'
+            )
+          }
+          className={`px-3 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+            activePreset === 'Tavily'
+              ? 'bg-[#18181B] text-white shadow-2xs'
+              : 'bg-white text-[#18181B] border border-[#EAE4D8] hover:bg-[#F4F0E8]'
+          }`}
         >
-          Tavily (Roy Elkabetz)
+          {activePreset === 'Tavily' && <Check className="h-3 w-3 text-[#4E876F]" />}
+          <span>Tavily (Roy Elkabetz)</span>
         </button>
       </div>
 
@@ -92,106 +139,121 @@ export const ManualInputForm: React.FC<ManualInputFormProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Target Company */}
           <div>
-            <label className="block text-xs font-semibold text-theme-primary uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-bold text-[#18181B] uppercase tracking-wider mb-1.5">
               Target Company *
             </label>
             <div className="relative">
-              <Building2 className="h-4 w-4 absolute left-3 top-3 text-theme-muted" />
+              <Building2 className="h-4 w-4 absolute left-3.5 top-3 text-[#8C8C94]" />
               <input
                 type="text"
                 required
                 value={company}
-                onChange={(e) => setCompany(e.target.value)}
+                onChange={(e) => {
+                  setCompany(e.target.value);
+                  setActivePreset('');
+                }}
                 placeholder="e.g. Stripe, Databricks, Snowflake"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-theme-glass-border focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary bg-transparent text-theme-text placeholder:text-theme-muted transition-all"
+                className="w-full bg-[#FAF8F5] focus:bg-white text-xs text-[#18181B] pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE4D8] focus:border-[#2E5A44] focus:outline-none focus:ring-2 focus:ring-[#2E5A44]/15 transition-all placeholder:text-[#A1A1AA]"
               />
             </div>
           </div>
 
-          {/* Attendee Name */}
+          {/* Primary Attendee */}
           <div>
-            <label className="block text-xs font-semibold text-theme-primary uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-bold text-[#18181B] uppercase tracking-wider mb-1.5">
               Primary Attendee *
             </label>
             <div className="relative">
-              <User className="h-4 w-4 absolute left-3 top-3 text-theme-muted" />
+              <User className="h-4 w-4 absolute left-3.5 top-3 text-[#8C8C94]" />
               <input
                 type="text"
                 required
                 value={attendee}
-                onChange={(e) => setAttendee(e.target.value)}
+                onChange={(e) => {
+                  setAttendee(e.target.value);
+                  setActivePreset('');
+                }}
                 placeholder="e.g. Patrick Collison"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-theme-glass-border focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary bg-transparent text-theme-text placeholder:text-theme-muted transition-all"
+                className="w-full bg-[#FAF8F5] focus:bg-white text-xs text-[#18181B] pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE4D8] focus:border-[#2E5A44] focus:outline-none focus:ring-2 focus:ring-[#2E5A44]/15 transition-all placeholder:text-[#A1A1AA]"
               />
             </div>
           </div>
 
           {/* Attendee Role */}
           <div>
-            <label className="block text-xs font-semibold text-theme-primary uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-bold text-[#18181B] uppercase tracking-wider mb-1.5">
               Attendee Role / Title
             </label>
-            <input
-              type="text"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              placeholder="e.g. CEO, VP Engineering, Head of Product"
-              className="w-full px-3 py-2 text-sm rounded-xl border border-theme-glass-border focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary bg-transparent text-theme-text placeholder:text-theme-muted transition-all"
-            />
+            <div className="relative">
+              <Briefcase className="h-4 w-4 absolute left-3.5 top-3 text-[#8C8C94]" />
+              <input
+                type="text"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="e.g. CEO, VP Engineering, Head of Product"
+                className="w-full bg-[#FAF8F5] focus:bg-white text-xs text-[#18181B] pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE4D8] focus:border-[#2E5A44] focus:outline-none focus:ring-2 focus:ring-[#2E5A44]/15 transition-all placeholder:text-[#A1A1AA]"
+              />
+            </div>
           </div>
 
-          {/* Meeting Datetime */}
+          {/* Meeting Date & Time */}
           <div>
-            <label className="block text-xs font-semibold text-theme-primary uppercase tracking-wider mb-1.5">
-              Meeting Date & Time *
+            <label className="block text-[11px] font-bold text-[#18181B] uppercase tracking-wider mb-1.5">
+              Meeting Date &amp; Time (UTC) *
             </label>
             <div className="relative">
-              <Clock className="h-4 w-4 absolute left-3 top-3 text-theme-muted" />
+              <Clock className="h-4 w-4 absolute left-3.5 top-3 text-[#8C8C94]" />
               <input
                 type="text"
                 required
                 value={datetime}
                 onChange={(e) => setDatetime(e.target.value)}
                 placeholder="e.g. 2026-11-20 14:00 UTC"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-theme-glass-border focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary bg-transparent text-theme-text placeholder:text-theme-muted transition-all"
+                className="w-full bg-[#FAF8F5] focus:bg-white text-xs text-[#18181B] pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE4D8] focus:border-[#2E5A44] focus:outline-none focus:ring-2 focus:ring-[#2E5A44]/15 transition-all placeholder:text-[#A1A1AA]"
               />
             </div>
           </div>
         </div>
 
-        {/* Meeting Goal */}
+        {/* Meeting Objective */}
         <div>
-          <label className="block text-xs font-semibold text-theme-primary uppercase tracking-wider mb-1.5">
-            Meeting Objective / Context
+          <label className="block text-[11px] font-bold text-[#18181B] uppercase tracking-wider mb-1.5">
+            Meeting Objective &amp; Strategic Context
           </label>
           <div className="relative">
-            <Target className="h-4 w-4 absolute left-3 top-3 text-theme-muted" />
+            <Target className="h-4 w-4 absolute left-3.5 top-3 text-[#8C8C94]" />
             <input
               type="text"
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
               placeholder="e.g. Partnership discussion, enterprise sales discovery, technical evaluation"
-              className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-theme-glass-border focus:outline-none focus:ring-2 focus:ring-theme-primary focus:border-theme-primary bg-transparent text-theme-text placeholder:text-theme-muted transition-all"
+              className="w-full bg-[#FAF8F5] focus:bg-white text-xs text-[#18181B] pl-10 pr-3.5 py-2.5 rounded-xl border border-[#EAE4D8] focus:border-[#2E5A44] focus:outline-none focus:ring-2 focus:ring-[#2E5A44]/15 transition-all placeholder:text-[#A1A1AA]"
             />
           </div>
         </div>
 
-        {/* Submit Action */}
-        <div className="pt-2 flex justify-end">
+        {/* Action Button Row */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs text-[#71717A]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+            <span>Tavily Search + LangGraph Agentic Pipeline Ready</span>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-gradient hover:opacity-95 text-theme-btn-text font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto tavily-btn-dark px-6 py-2.5 text-xs font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {isLoading ? (
               <>
-                <div className="h-4 w-4 border-2 border-theme-btn-text border-t-transparent rounded-full animate-spin" />
-                <span>Running 5-Branch Intelligence Pipeline...</span>
+                <div className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                <span>Running Research Pipeline...</span>
               </>
             ) : (
               <>
+                <Sparkles className="h-3.5 w-3.5 text-[#4E876F]" />
                 <span>Generate Executive Brief</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </>
             )}
           </button>
