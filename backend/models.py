@@ -110,7 +110,7 @@ class OnePageBriefing(BaseModel):
     undated_signals: List[ResearchFinding] = Field(default_factory=list, description="Preserved undated records with warning")
     aggregate_confidence: float = Field(ge=0.0, le=1.0)
     
-    inference_route: Literal["bifrost_gateway", "fallback_direct"]
+    inference_route: Literal["bifrost_gateway", "direct_provider_fallback", "deterministic_fallback"]
     generated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
