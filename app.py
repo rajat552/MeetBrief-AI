@@ -126,9 +126,15 @@ if os.path.exists(UI_DIST_DIR):
         if full_path.startswith("api/"):
             raise HTTPException(status_code=404, detail="API route not found")
         file_path = os.path.join(UI_DIST_DIR, full_path)
+        html_headers = {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        }
         if full_path and os.path.exists(file_path) and os.path.isfile(file_path):
-            return FileResponse(file_path)
-        return FileResponse(os.path.join(UI_DIST_DIR, "index.html"))
+            headers = html_headers if file_path.endswith(".html") else None
+            return FileResponse(file_path, headers=headers)
+        return FileResponse(os.path.join(UI_DIST_DIR, "index.html"), headers=html_headers)
 
 
 if __name__ == "__main__":
