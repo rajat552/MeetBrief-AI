@@ -62,7 +62,7 @@ async def test_langgraph_ainvoke_execution(sample_request):
         telemetry=GatewayTelemetry(
             model="gemini-flash-latest",
             latency_ms=10.0,
-            mode="fallback_direct"
+            mode="direct_provider_fallback"
         )
     )
 
@@ -176,3 +176,47 @@ async def test_langgraph_zero_thought_leakage(sample_request):
         assert "agent_thought" not in state_str
         assert "private_thinking" not in state_str
         assert "chain_of_thought" not in state_str
+
+
+@pytest.mark.asyncio
+async def test_langgraph_stream_terminal_event_is_complete(sample_request):
+    """Verifies that execute_stream emits 'complete' as the terminal event with a valid briefing."""
+    import json
+    orchestrator = MeetBriefOrchestrator()
+    events = []
+    with patch.object(orchestrator.agent_company, "execute", new_callable=AsyncMock) as m_comp, \
+         patch.object(orchestrator.agent_people, "execute", new_callable=AsyncMock) as m_peop, \
+         patch.object(orchestrator.agent_news, "execute", new_callable=AsyncMock) as m_news, \
+         patch.object(orchestrator.agent_launches, "execute", new_callable=AsyncMock) as m_laun, \
+         patch.object(orchestrator.agent_hiring, "execute", new_callable=AsyncMock) as m_hire:
+
+        m_comp.return_value = ([], [])
+        m_peop.return_value = ([], [])
+        m_news.return_value = ([], [])
+        m_laun.return_value = ([], [])
+        m_hire.return_value = ([], [])
+
+        async for frame in orchestrator.execute_stream(sample_request):
+            for line in frame.strip().split("\n"):
+                if line.startswith("event: "):
+                    events.append(line[7:])
+
+    assert len(events) > 0
+    assert events[-1] == "complete"
+    assert "briefing_complete" not in events  # Verified canonical single terminal event
+
+
+@pytest.mark.asyncio
+async def test_langgraph_stream_client_disconnect_graceful_cancellation(sample_request):
+    """Verifies that client cancellation/disconnect terminates the stream cleanly without unhandled error frames."""
+    import asyncio
+    orchestrator = MeetBriefOrchestrator()
+    gen = orchestrator.execute_stream(sample_request)
+
+    # Consume first frame (gateway_status)
+    first_frame = await gen.asend(None)
+    assert "event: gateway_status" in first_frame
+
+    # Simulate client disconnect by closing generator early
+    await gen.aclose()
+
