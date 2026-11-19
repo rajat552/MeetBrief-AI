@@ -3,10 +3,15 @@
   "buildCommand": "cd ui && npm install && npm run build",
   "outputDirectory": "ui/dist",
   "framework": "vite",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://meetbrief-ai-j8yo.onrender.com/api/:path*"
+      "destination": "/api/index.py"
     },
     {
       "source": "/(.*)",
