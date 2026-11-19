@@ -25,12 +25,15 @@ services:
 
   # Maxim Bifrost AI Gateway (Optional sponsor inference routing & telemetry)
   bifrost-gateway:
-    image: maximhq/bifrost:v2.3.1
+    image: maximhq/bifrost:v2.6.0
     container_name: meetbrief-bifrost-gateway
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8085:8080"
     environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - GROQ_API_KEY=${GROQ_API_KEY:-}
       - BIFROST_VIRTUAL_KEYS='[{"id":"sk-bf-meetbrief-prod","name":"MeetBrief AI"}]'
+    volumes:
+      - ./bifrost_data:/app/data
