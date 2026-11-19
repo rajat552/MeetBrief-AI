@@ -32,14 +32,19 @@ export const Header: React.FC<HeaderProps> = ({ gatewayStatus }) => {
         <div className="flex items-center space-x-4">
           {gatewayStatus ? (
             gatewayStatus.mode === 'bifrost_gateway' ? (
-              <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium">
+              <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium" title={gatewayStatus.reason || "Bifrost Gateway Active"}>
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                <span>Bifrost AI Gateway (:8080)</span>
+                <span>Bifrost AI Gateway (Active)</span>
               </div>
-            ) : (
+            ) : gatewayStatus.mode === 'direct_provider_fallback' ? (
               <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-medium" title={gatewayStatus.reason || "Direct Provider Active"}>
                 <Zap className="h-3.5 w-3.5 text-indigo-600" />
                 <span>Inference: Direct Provider (Active)</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-medium" title={gatewayStatus.reason || "Deterministic Rules Fallback"}>
+                <Cpu className="h-3.5 w-3.5 text-amber-600" />
+                <span>Inference: Deterministic Rules (Fallback)</span>
               </div>
             )
           ) : (
