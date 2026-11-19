@@ -12,9 +12,13 @@ import {
   HelpCircle,
   FileCheck2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  TrendingUp,
+  Sparkles,
+  Zap,
+  Cpu
 } from 'lucide-react';
-import { OnePageBriefing } from '../types/briefing';
+import { OnePageBriefing, ResearchFinding } from '../types/briefing';
 import { ExportToolbar } from './ExportToolbar';
 
 interface ExecutiveBriefingViewProps {
@@ -33,15 +37,15 @@ export const ExecutiveBriefingView: React.FC<ExecutiveBriefingViewProps> = ({
     if (!streamingMarkdown) return null;
 
     return (
-      <div className="glass-card p-6 sm:p-8 mt-6 print-page">
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-theme-glass-border">
-          <div className="flex items-center space-x-2 text-theme-accent font-semibold text-sm">
-            <div className="h-2 w-2 rounded-full bg-theme-accent animate-ping" />
+      <div className="tavily-card p-6 sm:p-8 mt-6 print-page">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#EAE4D8]">
+          <div className="flex items-center space-x-2 text-[#2E5A44] font-semibold text-sm">
+            <div className="h-2 w-2 rounded-full bg-[#16A34A] animate-ping" />
             <span>Streaming Executive Dossier...</span>
           </div>
           <ExportToolbar markdownContent={streamingMarkdown} />
         </div>
-        <div className="prose prose-invert max-w-none text-theme-text text-sm">
+        <div className="prose prose-stone max-w-none text-[#18181B] text-sm leading-relaxed">
           <ReactMarkdown>{streamingMarkdown}</ReactMarkdown>
         </div>
       </div>
@@ -58,66 +62,91 @@ ${briefing.card1_executive_snapshot}
 ## 2. Strategic Target Profile
 - Business Model: ${briefing.card2_company_profile.business_model}
 - Core Products: ${briefing.card2_company_profile.core_products.join(', ')}
+- Target Market: ${briefing.card2_company_profile.target_market}
 - Competitive Moat: ${briefing.card2_company_profile.competitive_moat}
+- Key Competitors: ${briefing.card2_company_profile.key_competitors.join(', ')}
 
-## 3. Key Attendee Dossier
-- Role: ${briefing.card3_attendee_dossier.verified_title}
-- Agenda: ${briefing.card3_attendee_dossier.likely_agenda}
-- Hook: ${briefing.card3_attendee_dossier.communication_hook}
+## 3. Attendee Dossier: ${briefing.card3_attendee_dossier.name}
+- Verified Title: ${briefing.card3_attendee_dossier.verified_title || 'N/A'}
+- Career History: ${briefing.card3_attendee_dossier.career_history.join('; ')}
+- Public Stances: ${briefing.card3_attendee_dossier.public_stances_and_quotes.join('; ')}
+- Likely Agenda: ${briefing.card3_attendee_dossier.likely_agenda || 'Strategic discussion'}
+- Communication Hook: ${briefing.card3_attendee_dossier.communication_hook || 'Direct collaboration'}
 
 ## 4. Preceding 30-Day Signals
-${briefing.card4_recent_30d_signals.map(s => `- [${s.category.toUpperCase()}] ${s.title}: ${s.summary}`).join('\n')}
+${briefing.card4_recent_30d_signals.map(s => `### [${s.category.toUpperCase()}] ${s.title} (${s.published_date || 'Within window'})\n${s.summary}\nSource: ${s.source_url}`).join('\n\n')}
 
-## 5. Strategic Discussion Points
-${briefing.card5_discussion_hooks.map((h, i) => `${i + 1}. ${h}`).join('\n')}
+## 5. Strategic Discussion Hooks
+${briefing.card5_discussion_hooks.map((hook, i) => `${i + 1}. ${hook}`).join('\n')}
 
 ## 6. Risk Blindspots & Open Questions
 ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
   `.trim();
 
   return (
-    <div className="glass-card p-6 sm:p-8 mt-6 space-y-6 print-page">
+    <div className="tavily-card p-6 sm:p-8 mt-6 space-y-6 print-page">
       {/* Dossier Header Banner */}
-      <div className="border-b border-theme-glass-border pb-5">
+      <div className="border-b border-[#EAE4D8] pb-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-theme-accent mb-1">
+            <div className="flex items-center space-x-2 text-[11px] font-bold uppercase tracking-wider text-[#2E5A44] mb-1">
               <span>Executive Intelligence Dossier</span>
               <span>•</span>
               <span>Preceding 30 Days</span>
             </div>
-            <h1 className="text-2xl font-extrabold text-theme-primary tracking-tight flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#18181B] tracking-tight flex items-center gap-2">
               <span>{briefing.target_company}</span>
-              <span className="text-theme-muted font-light">—</span>
-              <span className="text-theme-text font-semibold">{briefing.target_attendee}</span>
+              <span className="text-[#A1A1AA] font-light">—</span>
+              <span className="text-[#3F3F46] font-semibold">{briefing.target_attendee}</span>
             </h1>
-            <p className="text-xs text-theme-muted mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="flex items-center gap-1">
-                <Calendar className="h-3.5 w-3.5 text-theme-muted" />
+            <p className="text-xs text-[#71717A] mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="flex items-center gap-1 font-medium">
+                <Calendar className="h-3.5 w-3.5 text-[#2E5A44]" />
                 {briefing.meeting_datetime}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Target className="h-3.5 w-3.5 text-theme-muted" />
+                <Target className="h-3.5 w-3.5 text-[#8C8C94]" />
                 {briefing.meeting_goal || 'Strategic Discussion'}
               </span>
             </p>
           </div>
 
-          <div className="flex items-center space-x-3">
-            {/* Confidence Badge */}
-            <div className="text-right">
-              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-theme-glass text-theme-success border border-theme-glass-border text-xs font-semibold backdrop-blur-sm">
-                <ShieldCheck className="h-4 w-4 text-theme-success" />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* Confidence & Route Badges */}
+            <div className="flex items-center gap-2">
+              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] text-xs font-semibold shadow-2xs">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A]" />
                 <span>{Math.round(briefing.aggregate_confidence * 100)}% Fact Grounded</span>
               </div>
-              <p className="text-[10px] text-theme-muted mt-0.5">
-                Route: {briefing.inference_route === 'bifrost_gateway'
-                  ? 'Bifrost AI Gateway'
-                  : briefing.inference_route === 'direct_provider_fallback'
-                  ? 'Direct Provider Fallback'
-                  : 'Deterministic Rules Fallback'}
-              </p>
+
+              {briefing.inference_route && (
+                <div
+                  className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold shadow-2xs ${
+                    briefing.inference_route === 'bifrost_gateway'
+                      ? 'bg-[#EAF2EC] text-[#2E5A44] border-[#D5E5DA]'
+                      : briefing.inference_route === 'direct_provider_fallback'
+                      ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#DBEAFE]'
+                      : 'bg-[#F4F0E8] text-[#71717A] border-[#EAE4D8]'
+                  }`}
+                  title={`Inference route: ${briefing.inference_route}`}
+                >
+                  {briefing.inference_route === 'bifrost_gateway' ? (
+                    <ShieldCheck className="h-3 w-3 text-[#16A34A]" />
+                  ) : briefing.inference_route === 'direct_provider_fallback' ? (
+                    <Zap className="h-3 w-3 text-[#2563EB]" />
+                  ) : (
+                    <Cpu className="h-3 w-3 text-[#71717A]" />
+                  )}
+                  <span>
+                    {briefing.inference_route === 'bifrost_gateway'
+                      ? 'Bifrost'
+                      : briefing.inference_route === 'direct_provider_fallback'
+                      ? 'Direct LLM'
+                      : 'Rules'}
+                  </span>
+                </div>
+              )}
             </div>
 
             <ExportToolbar markdownContent={rawMarkdown} />
@@ -125,170 +154,169 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
         </div>
       </div>
 
-      {/* 6-Card Executive Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Grid of Cards: 6-Card Executive Structure */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Card 1: Executive Snapshot */}
-        <div className="glass-card glass-card-hover p-5 md:col-span-2">
-          <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-theme-accent" />
-            <span>1. Executive Snapshot & Strategic Context</span>
-          </h2>
-          <p className="text-sm text-theme-text leading-relaxed font-normal">
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2">
+          <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-[#18181B]">
+            <Sparkles className="h-4 w-4 text-[#2E5A44]" />
+            <span>1. Executive Snapshot</span>
+          </div>
+          <p className="text-xs text-[#27272A] leading-relaxed">
             {briefing.card1_executive_snapshot}
           </p>
         </div>
 
-        {/* Card 2: Strategic Target Profile */}
-        <div className="glass-card glass-card-hover p-5 space-y-3">
-          <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5 border-b border-theme-glass-border pb-2">
-            <Building2 className="h-4 w-4 text-theme-accent" />
-            <span>2. Strategic Company Profile</span>
-          </h2>
-          <div className="text-xs space-y-2 text-theme-muted">
-            <p>
-              <span className="font-semibold text-theme-primary">Business Model:</span>{' '}
-              {briefing.card2_company_profile.business_model}
-            </p>
-            <p>
-              <span className="font-semibold text-theme-primary">Core Products:</span>{' '}
-              {briefing.card2_company_profile.core_products.join(', ')}
-            </p>
-            <p>
-              <span className="font-semibold text-theme-primary">Competitive Moat:</span>{' '}
-              {briefing.card2_company_profile.competitive_moat}
-            </p>
-            <p>
-              <span className="font-semibold text-theme-primary">Key Competitors:</span>{' '}
-              {briefing.card2_company_profile.key_competitors.join(', ')}
-            </p>
+        {/* Card 2: Company Profile */}
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2.5 text-xs">
+          <div className="flex items-center space-x-2 font-bold uppercase tracking-wider text-[#18181B]">
+            <Building2 className="h-4 w-4 text-[#2E5A44]" />
+            <span>2. Strategic Target Profile</span>
+          </div>
+          <div className="space-y-1.5 text-[#3F3F46]">
+            <div>
+              <strong className="text-[#18181B]">Business Model:</strong> {briefing.card2_company_profile.business_model}
+            </div>
+            <div>
+              <strong className="text-[#18181B]">Core Products:</strong> {briefing.card2_company_profile.core_products.join(', ')}
+            </div>
+            <div>
+              <strong className="text-[#18181B]">Target Market:</strong> {briefing.card2_company_profile.target_market}
+            </div>
+            <div>
+              <strong className="text-[#18181B]">Competitive Moat:</strong> {briefing.card2_company_profile.competitive_moat}
+            </div>
+            <div>
+              <strong className="text-[#18181B]">Key Competitors:</strong> {briefing.card2_company_profile.key_competitors.join(', ')}
+            </div>
           </div>
         </div>
 
-        {/* Card 3: Key Attendee Dossier */}
-        <div className="glass-card glass-card-hover p-5 space-y-3">
-          <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5 border-b border-theme-glass-border pb-2">
-            <User className="h-4 w-4 text-theme-accent" />
-            <span>3. Key Attendee Dossier</span>
-          </h2>
-          <div className="text-xs space-y-2 text-theme-muted">
-            <p>
-              <span className="font-semibold text-theme-primary">Role & Title:</span>{' '}
-              {briefing.card3_attendee_dossier.verified_title}
-            </p>
-            <p>
-              <span className="font-semibold text-theme-primary">Likely Agenda:</span>{' '}
-              {briefing.card3_attendee_dossier.likely_agenda}
-            </p>
-            <p>
-              <span className="font-semibold text-theme-primary">Conversation Hook:</span>{' '}
-              {briefing.card3_attendee_dossier.communication_hook}
-            </p>
-            {briefing.card3_attendee_dossier.public_stances_and_quotes.length > 0 && (
-              <p>
-                <span className="font-semibold text-theme-primary">Stated Focus:</span>{' '}
-                {briefing.card3_attendee_dossier.public_stances_and_quotes[0]}
-              </p>
+        {/* Card 3: Attendee Dossier */}
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2.5 text-xs">
+          <div className="flex items-center space-x-2 font-bold uppercase tracking-wider text-[#18181B]">
+            <User className="h-4 w-4 text-[#2E5A44]" />
+            <span>3. Attendee Dossier</span>
+          </div>
+          <div className="space-y-2 text-[#3F3F46]">
+            <div>
+              <strong className="text-[#18181B]">Name &amp; Role:</strong> {briefing.card3_attendee_dossier.name} ({briefing.card3_attendee_dossier.verified_title || 'Attendee'})
+            </div>
+            {briefing.card3_attendee_dossier.career_history.length > 0 && (
+              <div>
+                <strong className="text-[#18181B]">Career Trajectory:</strong>
+                <ul className="list-disc list-inside mt-0.5 space-y-0.5 text-[11px]">
+                  {briefing.card3_attendee_dossier.career_history.map((hist, i) => (
+                    <li key={i}>{hist}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {briefing.card3_attendee_dossier.communication_hook && (
+              <div>
+                <strong className="text-[#18181B]">Communication Hook:</strong>{' '}
+                <span className="text-[#2E5A44] font-medium italic">
+                  {briefing.card3_attendee_dossier.communication_hook}
+                </span>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Card 4: Preceding 30-Day Signals */}
-        <div className="glass-card glass-card-hover p-5 md:col-span-2 space-y-3">
-          <div className="flex items-center justify-between border-b border-theme-glass-border pb-2">
-            <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-theme-accent" />
-              <span>4. Preceding 30-Day Signals (News, Launches & Hiring)</span>
-            </h2>
-            <span className="text-[11px] text-theme-muted font-medium">Strict Rolling Window</span>
+        {/* Card 4: Recent Signals (Preceding 30 Days) */}
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-[#18181B]">
+              <TrendingUp className="h-4 w-4 text-[#2E5A44]" />
+              <span>4. Verified 30-Day Signals ({briefing.card4_recent_30d_signals.length})</span>
+            </div>
+            <span className="text-[11px] font-semibold text-[#2E5A44] bg-[#EAF2EC] px-2 py-0.5 rounded-md">
+              Strictly Bounded
+            </span>
           </div>
 
-          {briefing.card4_recent_30d_signals.length > 0 ? (
-            <div className="space-y-2.5">
-              {briefing.card4_recent_30d_signals.map((sig, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-[rgba(14,11,10,0.5)] border border-theme-glass-border flex flex-col sm:flex-row sm:items-start justify-between gap-2 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-theme-glass text-theme-accent border border-theme-glass-border">
-                        {sig.category}
-                      </span>
-                      <a
-                        href={sig.source_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-semibold text-theme-text hover:text-theme-primary hover:underline flex items-center gap-1"
-                      >
-                        <span>{sig.title}</span>
-                        <ExternalLink className="h-3 w-3 shrink-0" />
-                      </a>
-                    </div>
-                    <p className="text-theme-muted leading-relaxed">{sig.summary}</p>
-                  </div>
-                  {sig.published_date && (
-                    <span className="text-theme-muted whitespace-nowrap text-[11px] shrink-0 font-medium">
-                      {sig.published_date}
-                    </span>
-                  )}
+          <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+            {briefing.card4_recent_30d_signals.map((sig: ResearchFinding, idx: number) => (
+              <div key={idx} className="p-3 rounded-xl bg-white border border-[#EAE4D8] space-y-1 shadow-2xs">
+                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#71717A]">
+                  <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EAE4D8] text-[#2E5A44]">
+                    {sig.category}
+                  </span>
+                  {sig.published_date && <span>{sig.published_date.substring(0, 10)}</span>}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-xs text-theme-muted italic p-3">
-              No verified public press releases or product drops recorded in the preceding 30 days.
-            </p>
-          )}
+                <h4 className="font-semibold text-xs text-[#18181B] line-clamp-2">
+                  {sig.title}
+                </h4>
+                <p className="text-[11px] text-[#52525B] line-clamp-2">
+                  {sig.summary}
+                </p>
+                {sig.source_url && (
+                  <a
+                    href={sig.source_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-[#2E5A44] hover:underline flex items-center space-x-1 pt-0.5 font-medium"
+                  >
+                    <span className="truncate">Source Citation</span>
+                    <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Card 5: High-Impact Discussion Hooks */}
-        <div className="glass-card glass-card-hover p-5 space-y-3">
-          <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5 border-b border-theme-glass-border pb-2">
-            <MessageSquare className="h-4 w-4 text-theme-success" />
-            <span>5. Strategic Discussion Points</span>
-          </h2>
-          <div className="space-y-2.5">
-            {briefing.card5_discussion_hooks.map((hook, i) => (
-              <div key={i} className="flex items-start space-x-2.5 text-xs text-theme-text">
-                <span className="h-5 w-5 rounded-lg bg-theme-glass text-theme-success border border-theme-glass-border font-bold flex items-center justify-center shrink-0 mt-0.5 text-[10px]">
-                  {i + 1}
+        {/* Card 5: Strategic Discussion Hooks */}
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2.5 text-xs">
+          <div className="flex items-center space-x-2 font-bold uppercase tracking-wider text-[#18181B]">
+            <MessageSquare className="h-4 w-4 text-[#2E5A44]" />
+            <span>5. High-Impact Discussion Hooks</span>
+          </div>
+          <div className="space-y-2">
+            {briefing.card5_discussion_hooks.map((hook: string, idx: number) => (
+              <div key={idx} className="p-2.5 rounded-xl bg-white border border-[#EAE4D8] flex items-start space-x-2">
+                <span className="h-4 w-4 rounded-full bg-[#EAF2EC] text-[#2E5A44] flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">
+                  {idx + 1}
                 </span>
-                <p className="leading-relaxed">{hook}</p>
+                <span className="text-[11px] text-[#27272A] leading-snug font-medium">{hook}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Card 6: Risk Blindspots & Open Questions */}
-        <div className="glass-card glass-card-hover p-5 space-y-3">
-          <h2 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5 border-b border-theme-glass-border pb-2">
-            <HelpCircle className="h-4 w-4 text-theme-danger" />
-            <span>6. Risk Blindspots & Open Questions</span>
-          </h2>
-          <div className="space-y-2.5">
-            {briefing.card6_risk_blindspots.map((risk, i) => (
-              <div key={i} className="flex items-start space-x-2.5 text-xs text-theme-text">
-                <span className="h-5 w-5 rounded-lg bg-theme-glass text-theme-danger border border-theme-glass-border font-bold flex items-center justify-center shrink-0 mt-0.5 text-[10px]">
+        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2 text-xs">
+          <div className="flex items-center space-x-2 font-bold uppercase tracking-wider text-[#DC2626]">
+            <HelpCircle className="h-4 w-4 text-[#DC2626]" />
+            <span>6. Risk Blindspots &amp; Open Questions</span>
+          </div>
+          <div className="space-y-2 pt-0.5">
+            {briefing.card6_risk_blindspots.map((risk: string, idx: number) => (
+              <div key={idx} className="p-2.5 rounded-xl bg-white border border-[#EAE4D8] flex items-start space-x-2">
+                <span className="h-4 w-4 rounded-full bg-[#FEF2F2] text-[#DC2626] flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">
                   ?
                 </span>
-                <p className="leading-relaxed">{risk}</p>
+                <span className="text-[11px] text-[#3F3F46] leading-snug">{risk}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Undated Signals Notice (if any) */}
+      {/* Undated Quarantine Notice */}
       {briefing.undated_signals.length > 0 && (
-        <div className="glass-card p-4 border-theme-accent-2/30 text-xs text-theme-text space-y-1.5">
-          <div className="flex items-center space-x-2 font-bold text-theme-accent-2">
-            <AlertTriangle className="h-4 w-4 text-theme-accent-2" />
+        <div className="p-4 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] text-xs text-[#92400E] space-y-1.5">
+          <div className="flex items-center space-x-2 font-bold text-[#B45309]">
+            <AlertTriangle className="h-4 w-4 text-[#D97706]" />
             <span>Undated Public Findings (Excluded from 30-Day Window)</span>
           </div>
-          <p className="text-[11px] text-theme-muted">
+          <p className="text-[11px]">
             These documents lacked verifiable timestamp metadata and were strictly quarantined from the 30-day signals:
           </p>
           <ul className="list-disc list-inside space-y-0.5 text-[11px]">
             {briefing.undated_signals.map((u, i) => (
               <li key={i}>
-                <a href={u.source_url} target="_blank" rel="noreferrer" className="underline hover:text-theme-primary text-theme-muted">
+                <a href={u.source_url} target="_blank" rel="noreferrer" className="underline hover:text-[#78350F]">
                   {u.title}
                 </a>
               </li>
@@ -299,45 +327,45 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
 
       {/* Traceable Evidence Grounding Drawer */}
       {briefing.verified_claims.length > 0 && (
-        <div className="glass-card overflow-hidden no-print">
+        <div className="tavily-card overflow-hidden no-print">
           <button
             type="button"
             onClick={() => setShowClaimsDrawer(!showClaimsDrawer)}
-            className="w-full px-5 py-3.5 bg-theme-glass hover:bg-[rgba(255,240,225,0.08)] flex items-center justify-between text-xs font-bold text-theme-primary transition-colors"
+            className="w-full px-5 py-3.5 bg-[#FAF8F5] hover:bg-[#F4F0E8] flex items-center justify-between text-xs font-bold text-[#18181B] transition-colors"
           >
             <div className="flex items-center space-x-2">
-              <FileCheck2 className="h-4 w-4 text-theme-accent" />
-              <span>Traceable Source Passages & Claim Verification ({briefing.verified_claims.length})</span>
+              <FileCheck2 className="h-4 w-4 text-[#2E5A44]" />
+              <span>Traceable Source Passages &amp; Claim Verification ({briefing.verified_claims.length})</span>
             </div>
-            {showClaimsDrawer ? <ChevronUp className="h-4 w-4 text-theme-muted" /> : <ChevronDown className="h-4 w-4 text-theme-muted" />}
+            {showClaimsDrawer ? <ChevronUp className="h-4 w-4 text-[#71717A]" /> : <ChevronDown className="h-4 w-4 text-[#71717A]" />}
           </button>
 
           {showClaimsDrawer && (
-            <div className="p-5 space-y-3 bg-[rgba(14,11,10,0.6)] divide-y divide-theme-glass-border">
+            <div className="p-5 space-y-3 bg-white divide-y divide-[#EAE4D8]">
               {briefing.verified_claims.map((claim, idx) => (
                 <div key={idx} className="pt-3 first:pt-0 space-y-1.5 text-xs">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-theme-text">{claim.claim}</span>
+                    <span className="font-semibold text-[#18181B]">{claim.claim}</span>
                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase shrink-0 border ${
                       claim.verification_status === 'VERIFIED_PRIMARY'
-                        ? 'bg-theme-glass text-theme-success border-theme-glass-border'
+                        ? 'bg-[#EAF2EC] text-[#2E5A44] border-[#D5E5DA]'
                         : claim.verification_status === 'REPORTED_SECONDARY'
-                        ? 'bg-theme-glass text-theme-accent border-theme-glass-border'
+                        ? 'bg-[#EFF6FF] text-[#1D4ED8] border-[#DBEAFE]'
                         : claim.verification_status === 'CONFLICTED'
-                        ? 'bg-theme-glass text-theme-danger border-theme-glass-border'
-                        : 'bg-theme-glass text-theme-muted border-theme-glass-border'
+                        ? 'bg-[#FEF2F2] text-[#DC2626] border-[#FCA5A5]'
+                        : 'bg-[#F4F0E8] text-[#71717A] border-[#EAE4D8]'
                     }`}>
                       {claim.verification_status} ({Math.round(claim.confidence_score * 100)}%)
                     </span>
                   </div>
                   {claim.source_passage && (
-                    <blockquote className="pl-3 border-l-2 border-theme-glass-border text-theme-muted italic text-[11px]">
+                    <blockquote className="pl-3 border-l-2 border-[#2E5A44] text-[#52525B] italic text-[11px] bg-[#FAF8F5] py-1 rounded-r">
                       "{claim.source_passage}"
                     </blockquote>
                   )}
-                  <div className="flex items-center space-x-2 text-[11px] text-theme-muted">
+                  <div className="flex items-center space-x-2 text-[11px] text-[#71717A]">
                     <span>Source:</span>
-                    <a href={claim.source_url} target="_blank" rel="noreferrer" className="text-theme-accent hover:text-theme-primary hover:underline flex items-center gap-1">
+                    <a href={claim.source_url} target="_blank" rel="noreferrer" className="text-[#2E5A44] hover:underline flex items-center gap-1 font-medium">
                       <span>{claim.source_title || claim.source_url}</span>
                       <ExternalLink className="h-2.5 w-2.5" />
                     </a>
