@@ -25,7 +25,7 @@ class GatewayTelemetry(BaseModel):
     tokens_prompt: Optional[int] = None
     tokens_completion: Optional[int] = None
     cost_usd: Optional[float] = None
-    mode: Literal["bifrost_gateway", "fallback_direct"]
+    mode: Literal["bifrost_gateway", "direct_provider_fallback", "deterministic_fallback"]
 
 
 class GatewayResponse(BaseModel):
@@ -38,7 +38,7 @@ class GatewayResponse(BaseModel):
 class GatewayStatus(BaseModel):
     """Health and routing status of the AI Gateway."""
     is_healthy: bool
-    mode: Literal["bifrost_gateway", "fallback_direct"]
+    mode: Literal["bifrost_gateway", "direct_provider_fallback", "deterministic_fallback"]
     endpoint: str
     reason: Optional[str] = None
     available_models: List[str] = Field(default_factory=list)
@@ -84,10 +84,19 @@ class BifrostClient:
         if not force_refresh and self._cached_status and (now - self._status_checked_at < self._health_cache_ttl_seconds):
             return self._cached_status
 
+        has_direct = (
+            self.config.is_openai_configured()
+            or self.config.is_groq_configured()
+            or self.config.is_gemini_configured()
+        )
+        offline_mode: Literal["direct_provider_fallback", "deterministic_fallback"] = (
+            "direct_provider_fallback" if has_direct else "deterministic_fallback"
+        )
+
         if not self.config.BIFROST_ENABLED:
             status = GatewayStatus(
                 is_healthy=False,
-                mode="fallback_direct",
+                mode=offline_mode,
                 endpoint=self.config.BIFROST_BASE_URL,
                 reason="Bifrost explicitly disabled in configuration (BIFROST_ENABLED=false)"
             )
@@ -121,9 +130,9 @@ class BifrostClient:
                 if "apache" in server_header or "nginx" in server_header and res.status_code == 404:
                     status = GatewayStatus(
                         is_healthy=False,
-                        mode="fallback_direct",
+                        mode=offline_mode,
                         endpoint=health_url,
-                        reason=f"Port 8080 occupied by non-Bifrost server ({res.headers.get('server')})"
+                        reason=f"Port occupied by non-Bifrost server ({res.headers.get('server')})"
                     )
                     self._cached_status = status
                     self._status_checked_at = now
@@ -151,21 +160,21 @@ class BifrostClient:
                 else:
                     status = GatewayStatus(
                         is_healthy=False,
-                        mode="fallback_direct",
+                        mode=offline_mode,
                         endpoint=health_url,
                         reason=f"Bifrost Gateway returned status HTTP {res.status_code}"
                     )
         except httpx.ConnectError:
             status = GatewayStatus(
                 is_healthy=False,
-                mode="fallback_direct",
+                mode=offline_mode,
                 endpoint=self.config.BIFROST_BASE_URL,
-                reason="Cannot connect to Bifrost Gateway at port 8080 (Connection refused)"
+                reason="Cannot connect to Bifrost Gateway (Connection refused)"
             )
         except Exception as e:
             status = GatewayStatus(
                 is_healthy=False,
-                mode="fallback_direct",
+                mode=offline_mode,
                 endpoint=self.config.BIFROST_BASE_URL,
                 reason=f"Bifrost health check error: {str(e)}"
             )
@@ -319,26 +328,26 @@ class BifrostClient:
                 "Authorization": f"Bearer {self.config.GEMINI_API_KEY}",
                 "Content-Type": "application/json"
             }
-            actual_model = "gemini-flash-latest"
+            actual_model = "gemini-flash-lite-latest"
             provider_name = "gemini"
         else:
-            # Deterministic offline mock fallback if no direct keys are set
+            # Deterministic offline template fallback if no direct keys are set
             elapsed_ms = (time.perf_counter() - start_time) * 1000
             return GatewayResponse(
-                content=f"[FALLBACK DIRECT MODE: {fallback_reason}] Direct provider keys not configured.",
+                content=f"[DETERMINISTIC FALLBACK MODE: {fallback_reason}] Direct provider keys not configured.",
                 telemetry=GatewayTelemetry(
-                    request_id="mock_fallback_req",
+                    request_id="deterministic_fallback_req",
                     latency_ms=round(elapsed_ms, 2),
                     upstream_latency_ms=None,
                     cache_hit=False,
-                    provider="direct_unconfigured",
+                    provider="deterministic_engine",
                     model=model,
                     tokens_prompt=0,
                     tokens_completion=0,
                     cost_usd=0.0,
-                    mode="fallback_direct"
+                    mode="deterministic_fallback"
                 ),
-                raw_response={"mock": True, "fallback_reason": fallback_reason}
+                raw_response={"deterministic_fallback": True, "fallback_reason": fallback_reason}
             )
 
         payload = {
@@ -370,7 +379,7 @@ class BifrostClient:
                 tokens_prompt=usage.get("prompt_tokens"),
                 tokens_completion=usage.get("completion_tokens"),
                 cost_usd=None,
-                mode="fallback_direct"
+                mode="direct_provider_fallback"
             )
 
             return GatewayResponse(content=content, telemetry=telemetry, raw_response=data)
@@ -404,7 +413,7 @@ class BifrostClient:
             yield {
                 "type": "gateway_status",
                 "data": {
-                    "mode": "fallback_direct",
+                    "mode": "direct_provider_fallback" if (self.config.is_openai_configured() or self.config.is_groq_configured() or self.config.is_gemini_configured()) else "deterministic_fallback",
                     "reason": gateway_status.reason or "Bifrost Gateway offline"
                 }
             }
@@ -429,7 +438,7 @@ class BifrostClient:
                     "Authorization": f"Bearer {self.config.OPENAI_API_KEY}",
                     "Content-Type": "application/json"
                 }
-            mode_label = "fallback_direct"
+            mode_label = "direct_provider_fallback"
 
         payload = {
             "model": clean_model,
