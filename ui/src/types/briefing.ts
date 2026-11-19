@@ -51,6 +51,8 @@ export interface AttendeeDossier {
   communication_hook?: string;
 }
 
+export type InferenceRoute = 'bifrost_gateway' | 'direct_provider_fallback' | 'deterministic_fallback';
+
 export interface OnePageBriefing {
   briefing_id: string;
   target_company: string;
@@ -66,12 +68,12 @@ export interface OnePageBriefing {
   verified_claims: VerifiedClaim[];
   undated_signals: ResearchFinding[];
   aggregate_confidence: number;
-  inference_route: 'bifrost_gateway' | 'fallback_direct';
+  inference_route: InferenceRoute;
   generated_at: string;
 }
 
 export interface GatewayStatusEvent {
-  mode: 'bifrost_gateway' | 'fallback_direct';
+  mode: InferenceRoute;
   endpoint: string;
   reason?: string;
   available_models?: string[];
