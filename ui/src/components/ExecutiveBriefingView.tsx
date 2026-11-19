@@ -112,7 +112,11 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
                 <span>{Math.round(briefing.aggregate_confidence * 100)}% Fact Grounded</span>
               </div>
               <p className="text-[10px] text-slate-400 mt-0.5">
-                Route: {briefing.inference_route === 'bifrost_gateway' ? 'Bifrost AI Gateway' : 'Direct Fallback'}
+                Route: {briefing.inference_route === 'bifrost_gateway'
+                  ? 'Bifrost AI Gateway'
+                  : briefing.inference_route === 'direct_provider_fallback'
+                  ? 'Direct Provider Fallback'
+                  : 'Deterministic Rules Fallback'}
               </p>
             </div>
 
