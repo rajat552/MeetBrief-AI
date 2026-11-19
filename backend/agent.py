@@ -336,6 +336,9 @@ class MeetBriefOrchestrator:
             # Stage 5: Complete Event with Structured Payload
             yield sse_frame("complete", briefing.model_dump())
 
+        except (asyncio.CancelledError, GeneratorExit):
+            logger.info("SSE client disconnected; cleanly terminating orchestrator stream.")
+            return
         except Exception as e:
             logger.exception("Unexpected error in MeetBriefOrchestrator")
             yield sse_frame("error", {
