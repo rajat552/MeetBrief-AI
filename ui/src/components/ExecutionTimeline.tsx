@@ -1,5 +1,14 @@
 import React from 'react';
-import { CheckCircle2, Clock, Globe, ShieldCheck, FileText, ChevronRight, AlertTriangle } from 'lucide-react';
+import {
+  CheckCircle2,
+  Clock,
+  Globe,
+  ShieldCheck,
+  FileText,
+  ChevronRight,
+  AlertTriangle,
+  ExternalLink
+} from 'lucide-react';
 import { SourceDiscoveredEvent, ClaimsVerifiedEvent } from '../types/briefing';
 
 interface ExecutionTimelineProps {
@@ -36,19 +45,25 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
   };
 
   return (
-    <div className="glass-card p-6 mb-6 no-print">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-bold text-theme-primary uppercase tracking-wider flex items-center gap-1.5">
-          <span>Execution Progress & Safe Streaming Pipeline</span>
-        </h3>
+    <div className="tavily-card p-6 mb-6 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-[#EAE4D8]">
+        <div className="flex items-center space-x-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#2E5A44] bg-[#EAF2EC] px-2 py-0.5 rounded-md">
+            Pipeline
+          </span>
+          <h3 className="text-sm font-bold text-[#18181B] tracking-tight">
+            Execution Progress &amp; Safe Streaming Pipeline
+          </h3>
+        </div>
+
         {claimsStats && (
-          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-theme-glass text-theme-success border border-theme-glass-border">
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] shadow-2xs self-start sm:self-auto">
             {claimsStats.verified_count} Primary / {claimsStats.reported_count} Secondary Grounded
           </span>
         )}
       </div>
 
-      {/* Progress Steps */}
+      {/* Progress Steps Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-4">
         {stages.map((st) => {
           const status = getStageStatus(st.id);
@@ -59,22 +74,22 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
               key={st.id}
               className={`p-3 rounded-xl border flex items-center space-x-2.5 transition-all ${
                 status === 'done'
-                  ? 'bg-theme-glass border-theme-success/40 text-theme-success'
+                  ? 'bg-[#EAF2EC]/60 border-[#D5E5DA] text-[#2E5A44]'
                   : status === 'active'
-                  ? 'bg-theme-glass border-theme-accent text-theme-accent ring-1 ring-theme-accent/40 animate-gentle-pulse'
+                  ? 'bg-white border-[#2E5A44] text-[#18181B] shadow-sm ring-1 ring-[#2E5A44]/30 animate-gentle-pulse'
                   : status === 'failed'
-                  ? 'bg-theme-glass border-theme-danger/40 text-theme-danger'
-                  : 'bg-theme-glass/30 border-theme-glass-border text-theme-muted'
+                  ? 'bg-[#FEF2F2] border-[#FCA5A5] text-[#DC2626]'
+                  : 'bg-[#FAF8F5] border-[#EAE4D8] text-[#8C8C94]'
               }`}
             >
               {status === 'done' ? (
-                <CheckCircle2 className="h-4 w-4 text-theme-success shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-[#16A34A] shrink-0" />
               ) : status === 'active' ? (
-                <div className="h-4 w-4 rounded-full border-2 border-theme-accent border-t-transparent animate-spin shrink-0" />
+                <div className="h-4 w-4 rounded-full border-2 border-[#2E5A44] border-t-transparent animate-spin shrink-0" />
               ) : status === 'failed' ? (
-                <AlertTriangle className="h-4 w-4 text-theme-danger shrink-0" />
+                <AlertTriangle className="h-4 w-4 text-[#DC2626] shrink-0" />
               ) : (
-                <Icon className="h-4 w-4 text-theme-muted shrink-0" />
+                <Icon className="h-4 w-4 text-[#A1A1AA] shrink-0" />
               )}
               <span className="text-xs font-semibold truncate">{st.label}</span>
             </div>
@@ -82,31 +97,39 @@ export const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({
         })}
       </div>
 
-      {/* Status Description Bar */}
+      {/* Stage Description Bar */}
       {stageDescription && (
-        <div className="p-2.5 rounded-xl bg-theme-glass/60 border border-theme-glass-border text-xs text-theme-text flex items-center space-x-2 backdrop-blur-sm">
-          <ChevronRight className="h-3.5 w-3.5 text-theme-accent shrink-0" />
-          <span className="truncate">{stageDescription}</span>
+        <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE4D8] text-xs text-[#18181B] flex items-center space-x-2">
+          <ChevronRight className="h-3.5 w-3.5 text-[#2E5A44] shrink-0" />
+          <span className="truncate font-medium">{stageDescription}</span>
         </div>
       )}
 
       {/* Discovered Sources Live Feed */}
       {sources.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-theme-glass-border">
-          <div className="flex items-center justify-between text-xs text-theme-muted mb-2">
+        <div className="mt-4 pt-3 border-t border-[#EAE4D8]">
+          <div className="flex items-center justify-between text-xs text-[#71717A] mb-2 font-medium">
             <span>Discovered Evidence Sources ({sources.length}):</span>
+            <span className="text-[11px] text-[#A1A1AA]">Bounded to 30 days</span>
           </div>
-          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+          <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1">
             {sources.map((s, idx) => (
               <a
                 key={idx}
                 href={s.url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-theme-glass hover:bg-[rgba(255,240,225,0.1)] text-theme-text text-xs font-medium border border-theme-glass-border transition-colors truncate max-w-xs backdrop-blur-sm"
+                className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-[#FAF8F5] border border-[#EAE4D8] text-[11px] text-[#52525B] hover:text-[#18181B] transition-colors shadow-2xs group"
+                title={`${s.title} (${s.published_date || 'Within window'})`}
               >
-                <span className={`h-1.5 w-1.5 rounded-full ${s.tier === 1 ? 'bg-theme-accent' : 'bg-theme-success'}`} />
-                <span className="truncate">{s.title || s.url}</span>
+                <Globe className="h-3 w-3 text-[#2E5A44] shrink-0" />
+                <span className="max-w-[200px] truncate">{s.title}</span>
+                {s.published_date && (
+                  <span className="text-[10px] text-[#8C8C94] font-mono">
+                    [{s.published_date.substring(0, 10)}]
+                  </span>
+                )}
+                <ExternalLink className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#A1A1AA]" />
               </a>
             ))}
           </div>
