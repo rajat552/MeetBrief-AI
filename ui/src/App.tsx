@@ -34,20 +34,20 @@ export const App: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         setGatewayStatus({
-          mode: data.mode === 'bifrost_gateway' ? 'bifrost_gateway' : 'fallback_direct',
+          mode: data.mode as 'bifrost_gateway' | 'direct_provider_fallback' | 'deterministic_fallback',
           endpoint: data.endpoint,
           primary_model: data.primary_model,
           fallback_model: data.fallback_model,
           virtual_key_active: data.virtual_key_active,
-          reason: data.details,
+          reason: data.details || data.reason,
         });
       })
       .catch(() => {
         setGatewayStatus({
-          mode: 'fallback_direct',
-          endpoint: 'Local direct',
-          primary_model: 'Direct Fallback',
-          fallback_model: 'Direct Fallback',
+          mode: 'deterministic_fallback',
+          endpoint: 'Local deterministic',
+          primary_model: 'Deterministic Rules',
+          fallback_model: 'Deterministic Rules',
           virtual_key_active: false,
           reason: 'Health check probe timed out',
         });
