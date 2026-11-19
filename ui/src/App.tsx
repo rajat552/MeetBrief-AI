@@ -11,7 +11,16 @@ import {
   SourceDiscoveredEvent,
   ClaimsVerifiedEvent,
 } from './types/briefing';
-import { AlertTriangle, Sparkles, User, Globe, FileText, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  Sparkles,
+  User,
+  Globe,
+  FileText,
+  ShieldCheck,
+  Clock,
+  CheckCircle2,
+} from 'lucide-react';
 
 export const App: React.FC = () => {
   const [gatewayStatus, setGatewayStatus] = useState<GatewayStatusEvent | null>(null);
@@ -34,12 +43,15 @@ export const App: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         setGatewayStatus({
-          mode: data.mode as 'bifrost_gateway' | 'direct_provider_fallback' | 'deterministic_fallback',
-          endpoint: data.endpoint,
-          primary_model: data.primary_model,
-          fallback_model: data.fallback_model,
-          virtual_key_active: data.virtual_key_active,
-          reason: data.details || data.reason,
+          mode: (data.gateway?.mode || data.mode) as
+            | 'bifrost_gateway'
+            | 'direct_provider_fallback'
+            | 'deterministic_fallback',
+          endpoint: data.gateway?.endpoint || data.endpoint,
+          primary_model: data.gateway?.primary_model || data.primary_model,
+          fallback_model: data.gateway?.fallback_model || data.fallback_model,
+          virtual_key_active: data.gateway?.virtual_key_active ?? data.virtual_key_active,
+          reason: data.gateway?.reason || data.details || data.reason,
         });
       })
       .catch(() => {
@@ -186,68 +198,78 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen glow-background text-theme-text flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#18181B] flex flex-col font-sans selection:bg-[#2E5A44] selection:text-white">
+      {/* Top Header */}
       <Header gatewayStatus={gatewayStatus} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Layout */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Hero Section */}
-        <div className="text-center mb-8 no-print">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-theme-glass border border-theme-glass-border text-xs font-medium text-theme-accent mb-3 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Autonomous Pre-Meeting Intelligence</span>
+        <div className="text-center space-y-4 max-w-3xl mx-auto pt-2 pb-2">
+          {/* Autonomous Meeting Intelligence Badge */}
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] text-xs font-semibold shadow-2xs">
+            <Sparkles className="h-3.5 w-3.5 text-[#2E5A44]" />
+            <span>Autonomous Meeting Intelligence</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
-            Enter Every Meeting <span className="bg-brand-gradient bg-clip-text text-transparent">Better Informed</span>
+
+          {/* Hero Headline */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#18181B] tracking-tight leading-tight">
+            Enter Every Meeting{' '}
+            <span className="bg-gradient-to-r from-[#2E5A44] to-[#4E876F] bg-clip-text text-transparent">
+              Better Informed
+            </span>
           </h1>
-          <p className="text-sm sm:text-base text-theme-muted max-w-2xl mx-auto mt-2">
-            Transform recent web intelligence into a scannable, source-grounded executive briefing covering the preceding 30 days.
+
+          {/* Subtitle */}
+          <p className="text-sm sm:text-base text-[#71717A] max-w-2xl mx-auto leading-relaxed">
+            High-conviction executive dossiers assembled in under 2 minutes. Grounded by Tavily Search and routed via Maxim Bifrost.
           </p>
 
-          {/* 3-Step "How It Works" Glass Strip */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl mx-auto mt-6 text-left">
-            <div className="glass-card p-4 flex items-start gap-3">
-              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-accent">
+          {/* 3 Step Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-6 text-left">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
+              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <User className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">1. Meeting Context</h4>
-                <p className="text-xs text-theme-muted mt-0.5">Input target company, attendee name, and scheduled datetime.</p>
+                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">1. Meeting Context</h4>
+                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Input target company, attendee name, and scheduled datetime.</p>
               </div>
             </div>
 
-            <div className="glass-card p-4 flex items-start gap-3">
-              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-accent-2">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
+              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <Globe className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">2. 5-Branch Research</h4>
-                <p className="text-xs text-theme-muted mt-0.5">Concurrent crawl: news, launches, hiring & background strictly bounded to 30 days.</p>
+                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">2. 5-Branch Research</h4>
+                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Concurrent crawl: news, launches, hiring & background strictly bounded to 30 days.</p>
               </div>
             </div>
 
-            <div className="glass-card p-4 flex items-start gap-3">
-              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-success">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
+              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <FileText className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">3. Executive Dossier</h4>
-                <p className="text-xs text-theme-muted mt-0.5">Scannable one-page briefing (&lt; 600 words) with grounded citations.</p>
+                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">3. Executive Dossier</h4>
+                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Scannable one-page briefing (&lt; 600 words) with grounded citations.</p>
               </div>
             </div>
           </div>
 
           {/* Real README Facts Trust Strip */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-theme-muted mt-5 pt-3 border-t border-theme-glass-border max-w-3xl mx-auto">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-theme-success" />
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-[#71717A] mt-6 pt-4 border-t border-[#EAE4D8] max-w-3xl mx-auto">
+            <div className="flex items-center gap-1.5 font-medium">
+              <ShieldCheck className="h-4 w-4 text-[#2E5A44]" />
               <span>44 Verified Unit &amp; Security Tests</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5 text-theme-accent" />
+            <div className="flex items-center gap-1.5 font-medium">
+              <Clock className="h-4 w-4 text-[#2E5A44]" />
               <span>Strict Rolling 30-Day Window</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-theme-accent-2" />
+            <div className="flex items-center gap-1.5 font-medium">
+              <CheckCircle2 className="h-4 w-4 text-[#2E5A44]" />
               <span>&lt; 600 Words in &lt; 2 Minutes</span>
             </div>
           </div>
@@ -255,11 +277,11 @@ export const App: React.FC = () => {
 
         {/* Error Notification */}
         {error && (
-          <div className="mb-6 p-4 glass-card border-theme-danger/50 text-theme-text flex items-start space-x-3 no-print">
-            <AlertTriangle className="h-5 w-5 text-theme-danger flex-shrink-0 mt-0.5" />
+          <div className="p-4 rounded-2xl bg-[#FEF2F2] border border-[#FCA5A5] text-[#991B1B] flex items-start space-x-3 no-print shadow-2xs max-w-4xl mx-auto">
+            <AlertTriangle className="h-5 w-5 text-[#DC2626] flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <h4 className="font-semibold text-sm text-theme-danger">Execution Interrupted</h4>
-              <p className="text-xs text-theme-muted mt-0.5">{error}</p>
+              <h4 className="font-semibold text-sm text-[#991B1B]">Execution Interrupted</h4>
+              <p className="text-xs text-[#B91C1C] mt-0.5">{error}</p>
             </div>
           </div>
         )}
@@ -273,7 +295,7 @@ export const App: React.FC = () => {
 
         {/* Execution Timeline (visible when running or completed) */}
         {(isLoading || isComplete || sources.length > 0) && (
-          <div className="mt-6">
+          <div className="max-w-4xl mx-auto">
             <ExecutionTimeline
               currentStage={currentStage}
               stageDescription={stageDescription}
@@ -298,13 +320,45 @@ export const App: React.FC = () => {
         onUseManual={() => setIsCalendarOpen(false)}
       />
 
-      {/* Footer */}
-      <footer className="w-full bg-theme-glass/40 border-t border-theme-glass-border py-6 text-center text-xs text-theme-muted no-print mt-12 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>MeetBrief AI &copy; 2026 &bull; Autonomous Meeting Intelligence</span>
-          <span className="text-theme-muted">
-            Maxim Bifrost AI Gateway &bull; Tavily Search &bull; Deterministic Evidence Grounding
-          </span>
+      {/* Minimalist Professional Footer */}
+      <footer className="w-full bg-[#FAF8F5] border-t border-[#EAE4D8] py-8 text-xs text-[#71717A] no-print mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Left: Operational status indicator */}
+          <div className="flex items-center space-x-2">
+            <span className="h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
+            <span className="font-semibold text-[#18181B]">All systems operational</span>
+            <span className="text-[#A1A1AA]">•</span>
+            <span>Preceding 30-Day Bounded Web Signals</span>
+          </div>
+
+          {/* Right: Copyright & links */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[#71717A]">
+            <span>MeetBrief AI &copy; 2026</span>
+            <a
+              href="https://tavily.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#18181B] transition-colors"
+            >
+              Tavily Search
+            </a>
+            <a
+              href="https://bifrost.maximhq.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#18181B] transition-colors"
+            >
+              Maxim Bifrost AI Gateway
+            </a>
+            <a
+              href="https://github.com/rajat552/MeetBrief-AI"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#18181B] transition-colors"
+            >
+              GitHub
+            </a>
+          </div>
         </div>
       </footer>
     </div>
