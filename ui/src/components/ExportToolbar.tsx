@@ -26,17 +26,17 @@ export const ExportToolbar: React.FC<ExportToolbarProps> = ({ markdownContent })
     <div className="flex items-center space-x-2 no-print">
       <button
         onClick={handleCopy}
-        className="px-3 py-1.5 rounded-xl bg-theme-glass border border-theme-primary/30 hover:border-theme-primary hover:bg-[rgba(255,240,225,0.1)] text-theme-text text-xs font-medium shadow-sm transition-all flex items-center space-x-1.5 backdrop-blur-sm"
+        className="px-3 py-1.5 rounded-xl bg-white border border-[#EAE4D8] hover:bg-[#FAF8F5] text-[#18181B] text-xs font-semibold shadow-2xs transition-all flex items-center space-x-1.5"
         title="Copy raw formatted Markdown"
       >
         {copied ? (
           <>
-            <Check className="h-3.5 w-3.5 text-theme-success" />
-            <span className="text-theme-success">Copied!</span>
+            <Check className="h-3.5 w-3.5 text-[#16A34A]" />
+            <span className="text-[#16A34A]">Copied!</span>
           </>
         ) : (
           <>
-            <Copy className="h-3.5 w-3.5 text-theme-muted" />
+            <Copy className="h-3.5 w-3.5 text-[#71717A]" />
             <span>Copy Markdown</span>
           </>
         )}
@@ -44,10 +44,10 @@ export const ExportToolbar: React.FC<ExportToolbarProps> = ({ markdownContent })
 
       <button
         onClick={handlePrint}
-        className="px-3 py-1.5 rounded-xl bg-theme-glass border border-theme-primary/30 hover:border-theme-primary hover:bg-[rgba(255,240,225,0.1)] text-theme-text text-xs font-medium shadow-sm transition-all flex items-center space-x-1.5 backdrop-blur-sm"
+        className="px-3 py-1.5 rounded-xl bg-white border border-[#EAE4D8] hover:bg-[#FAF8F5] text-[#18181B] text-xs font-semibold shadow-2xs transition-all flex items-center space-x-1.5"
         title="Print or export as clean PDF"
       >
-        <Printer className="h-3.5 w-3.5 text-theme-muted" />
+        <Printer className="h-3.5 w-3.5 text-[#71717A]" />
         <span>Print / PDF</span>
       </button>
     </div>
