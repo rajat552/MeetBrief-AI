@@ -48,7 +48,7 @@ async def test_gateway_health_detects_non_bifrost_server(mock_settings):
         status = await client.check_health(force_refresh=True)
 
         assert status.is_healthy is False
-        assert status.mode == "fallback_direct"
+        assert status.mode == "direct_provider_fallback"
         assert "Apache" in status.reason
 
 
@@ -61,7 +61,7 @@ async def test_gateway_health_connection_error(mock_settings):
         status = await client.check_health(force_refresh=True)
 
         assert status.is_healthy is False
-        assert status.mode == "fallback_direct"
+        assert status.mode == "direct_provider_fallback"
         assert "Connection refused" in status.reason
 
 
@@ -136,8 +136,8 @@ async def test_explicit_direct_provider_fallback_when_gateway_offline(mock_setti
             )
 
             assert response.content == "Direct OpenAI completion response."
-            # Mode MUST be explicitly labeled fallback_direct (never falsely claiming bifrost)
-            assert response.telemetry.mode == "fallback_direct"
+            # Mode MUST be explicitly labeled direct_provider_fallback (never falsely claiming bifrost)
+            assert response.telemetry.mode == "direct_provider_fallback"
             assert response.telemetry.provider == "openai"
             assert response.telemetry.request_id == "chatcmpl-openai-direct-999"
 
@@ -167,7 +167,7 @@ async def test_explicit_direct_groq_fallback(mock_settings):
             )
 
             assert response.content == "Direct Groq Llama completion."
-            assert response.telemetry.mode == "fallback_direct"
+            assert response.telemetry.mode == "direct_provider_fallback"
             assert response.telemetry.provider == "groq"
             call_url = mock_post_call.call_args.args[0]
             assert "api.groq.com" in call_url
@@ -199,7 +199,7 @@ async def test_stream_emits_fallback_status_event_on_gateway_offline(mock_settin
 
             # First event must be gateway_status explicitly alerting the fallback
             assert events[0]["type"] == "gateway_status"
-            assert events[0]["data"]["mode"] == "fallback_direct"
+            assert events[0]["data"]["mode"] == "direct_provider_fallback"
             
             # Subsequent events are clean chunk tokens
             tokens = [e["content"] for e in events if e["type"] == "chunk"]
@@ -208,4 +208,4 @@ async def test_stream_emits_fallback_status_event_on_gateway_offline(mock_settin
             # Final event is telemetry
             last = events[-1]
             assert last["type"] == "telemetry"
-            assert last["data"]["mode"] == "fallback_direct"
+            assert last["data"]["mode"] == "direct_provider_fallback"
