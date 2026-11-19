@@ -8,6 +8,7 @@ from backend.config import Settings
 
 def test_settings_defaults():
     s = Settings(
+        _env_file=None,
         TAVILY_API_KEY="tvly-mock",
         BIFROST_VIRTUAL_KEY="sk-bf-test",
         BIFROST_ENABLED=True,
