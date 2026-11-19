@@ -2,13 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #080B11;
+  --bg-2: #101522;
+  --glass: rgba(16, 21, 34, 0.70);
+  --glass-border: rgba(212, 175, 55, 0.28);
+  --glass-border-hover: rgba(212, 175, 55, 0.55);
+  --primary: #F3E5AB;
+  --accent: #D4AF37;
+  --accent-2: #E5C07B;
+  --text: #F8FAFC;
+  --muted: #94A3B8;
+  --success: #34D399;
+  --danger: #F87171;
+  --btn-text: #080B11;
+}
+
 @layer base {
   body {
-    @apply antialiased selection:bg-indigo-500 selection:text-white;
+    background-color: var(--bg);
+    color: var(--text);
+    @apply antialiased selection:bg-[#D4AF37] selection:text-[#080B11];
+  }
+}
+
+/* Glassmorphism Card Style with Golden Border */
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(212, 175, 55, 0.12);
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(212, 175, 55, 0.18);
+}
+
+/* Page Glow Backdrop in Golden Aura */
+.glow-background {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 50% -60px, rgba(212, 175, 55, 0.10) 0%, transparent 600px),
+    radial-gradient(circle at 85% 20%, rgba(229, 192, 123, 0.05) 0%, transparent 450px);
+}
+
+/* Gentle Pulse for Running State */
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.02);
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom Luxury Gold Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 @media print {
+  body, .print-page {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+  .print-page * {
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
   header, form, .no-print {
     display: none !important;
   }

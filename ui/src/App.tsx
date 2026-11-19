@@ -11,7 +11,7 @@ import {
   SourceDiscoveredEvent,
   ClaimsVerifiedEvent,
 } from './types/briefing';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Sparkles, User, Globe, FileText, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [gatewayStatus, setGatewayStatus] = useState<GatewayStatusEvent | null>(null);
@@ -186,17 +186,80 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen glow-background text-theme-text flex flex-col font-sans">
       <Header gatewayStatus={gatewayStatus} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-8 no-print">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-theme-glass border border-theme-glass-border text-xs font-medium text-theme-accent mb-3 backdrop-blur-md">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Autonomous Pre-Meeting Intelligence</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-theme-primary tracking-tight">
+            Enter Every Meeting <span className="bg-brand-gradient bg-clip-text text-transparent">Better Informed</span>
+          </h1>
+          <p className="text-sm sm:text-base text-theme-muted max-w-2xl mx-auto mt-2">
+            Transform recent web intelligence into a scannable, source-grounded executive briefing covering the preceding 30 days.
+          </p>
+
+          {/* 3-Step "How It Works" Glass Strip */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-4xl mx-auto mt-6 text-left">
+            <div className="glass-card p-4 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-accent">
+                <User className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">1. Meeting Context</h4>
+                <p className="text-xs text-theme-muted mt-0.5">Input target company, attendee name, and scheduled datetime.</p>
+              </div>
+            </div>
+
+            <div className="glass-card p-4 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-accent-2">
+                <Globe className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">2. 5-Branch Research</h4>
+                <p className="text-xs text-theme-muted mt-0.5">Concurrent crawl: news, launches, hiring & background strictly bounded to 30 days.</p>
+              </div>
+            </div>
+
+            <div className="glass-card p-4 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-theme-glass border border-theme-glass-border flex items-center justify-center shrink-0 text-theme-success">
+                <FileText className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-theme-primary uppercase tracking-wider">3. Executive Dossier</h4>
+                <p className="text-xs text-theme-muted mt-0.5">Scannable one-page briefing (&lt; 600 words) with grounded citations.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Real README Facts Trust Strip */}
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-theme-muted mt-5 pt-3 border-t border-theme-glass-border max-w-3xl mx-auto">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-theme-success" />
+              <span>44 Verified Unit &amp; Security Tests</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 text-theme-accent" />
+              <span>Strict Rolling 30-Day Window</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-theme-accent-2" />
+              <span>&lt; 600 Words in &lt; 2 Minutes</span>
+            </div>
+          </div>
+        </div>
+
         {/* Error Notification */}
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 flex items-start space-x-3 no-print">
-            <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="mb-6 p-4 glass-card border-theme-danger/50 text-theme-text flex items-start space-x-3 no-print">
+            <AlertTriangle className="h-5 w-5 text-theme-danger flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <h4 className="font-semibold text-sm">Execution Interrupted</h4>
-              <p className="text-xs text-red-700 mt-0.5">{error}</p>
+              <h4 className="font-semibold text-sm text-theme-danger">Execution Interrupted</h4>
+              <p className="text-xs text-theme-muted mt-0.5">{error}</p>
             </div>
           </div>
         )}
@@ -236,10 +299,10 @@ export const App: React.FC = () => {
       />
 
       {/* Footer */}
-      <footer className="w-full bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 no-print mt-12">
+      <footer className="w-full bg-theme-glass/40 border-t border-theme-glass-border py-6 text-center text-xs text-theme-muted no-print mt-12 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>MeetBrief AI &copy; 2026 &bull; Autonomous Meeting Intelligence</span>
-          <span className="text-slate-400">
+          <span className="text-theme-muted">
             Maxim Bifrost AI Gateway &bull; Tavily Search &bull; Deterministic Evidence Grounding
           </span>
         </div>
