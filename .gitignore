@@ -81,3 +81,10 @@ architecture.md
 gap-analysis.md
 implementation-plan.md
 
+# Remotion Video
+remotion/
+remotion-*/
+video/
+.remotion/
+
+
