@@ -26,17 +26,17 @@ export const ExportToolbar: React.FC<ExportToolbarProps> = ({ markdownContent })
     <div className="flex items-center space-x-2 no-print">
       <button
         onClick={handleCopy}
-        className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-sm transition-colors flex items-center space-x-1.5"
+        className="px-3 py-1.5 rounded-xl bg-theme-glass border border-theme-primary/30 hover:border-theme-primary hover:bg-[rgba(255,240,225,0.1)] text-theme-text text-xs font-medium shadow-sm transition-all flex items-center space-x-1.5 backdrop-blur-sm"
         title="Copy raw formatted Markdown"
       >
         {copied ? (
           <>
-            <Check className="h-3.5 w-3.5 text-emerald-600" />
-            <span className="text-emerald-700">Copied!</span>
+            <Check className="h-3.5 w-3.5 text-theme-success" />
+            <span className="text-theme-success">Copied!</span>
           </>
         ) : (
           <>
-            <Copy className="h-3.5 w-3.5 text-slate-500" />
+            <Copy className="h-3.5 w-3.5 text-theme-muted" />
             <span>Copy Markdown</span>
           </>
         )}
@@ -44,10 +44,10 @@ export const ExportToolbar: React.FC<ExportToolbarProps> = ({ markdownContent })
 
       <button
         onClick={handlePrint}
-        className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-sm transition-colors flex items-center space-x-1.5"
+        className="px-3 py-1.5 rounded-xl bg-theme-glass border border-theme-primary/30 hover:border-theme-primary hover:bg-[rgba(255,240,225,0.1)] text-theme-text text-xs font-medium shadow-sm transition-all flex items-center space-x-1.5 backdrop-blur-sm"
         title="Print or export as clean PDF"
       >
-        <Printer className="h-3.5 w-3.5 text-slate-500" />
+        <Printer className="h-3.5 w-3.5 text-theme-muted" />
         <span>Print / PDF</span>
       </button>
     </div>
