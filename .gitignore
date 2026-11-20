@@ -74,6 +74,7 @@ scratch/
 tmp/
 
 # Documentation & Audit Reference
+*.pdf
 pdf.md
 understanding.md
 testing-plan.md
@@ -89,3 +90,4 @@ video/
 .remotion/
 
 
+/pdf-build
