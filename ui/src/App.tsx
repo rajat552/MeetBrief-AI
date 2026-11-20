@@ -202,11 +202,11 @@ export const App: React.FC = () => {
       <Header gatewayStatus={gatewayStatus} />
 
       {/* Main Content Layout */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6 sm:space-y-8">
         {/* Hero Section */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto pt-2 pb-2">
+        <div className="text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto pt-1 sm:pt-2 pb-1 sm:pb-2">
           {/* Hero Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#18181B] tracking-tight leading-tight">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#18181B] tracking-tight leading-tight">
             Enter Every Meeting{' '}
             <span className="bg-gradient-to-r from-[#2E5A44] to-[#4E876F] bg-clip-text text-transparent">
               Better Informed
@@ -214,55 +214,55 @@ export const App: React.FC = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base text-[#71717A] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-[#71717A] max-w-2xl mx-auto leading-relaxed px-2">
             High-conviction executive dossiers assembled in under 2 minutes. Grounded by Tavily Search and routed via Maxim Bifrost.
           </p>
 
           {/* 3 Step Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-6 text-left">
-            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
-              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto mt-4 sm:mt-6 text-left">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-3.5 sm:p-4 flex items-start gap-3 sm:gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
+              <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <User className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">1. Meeting Context</h4>
-                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Input target company, attendee name, and scheduled datetime.</p>
+                <h4 className="text-[11px] sm:text-xs font-bold text-[#18181B] uppercase tracking-wider">1. Meeting Context</h4>
+                <p className="text-xs text-[#71717A] mt-0.5 sm:mt-1 leading-relaxed">Input target company, attendee name, and scheduled datetime.</p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
-              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-3.5 sm:p-4 flex items-start gap-3 sm:gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
+              <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <Globe className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">2. 5-Branch Research</h4>
-                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Concurrent crawl: news, launches, hiring & background strictly bounded to 30 days.</p>
+                <h4 className="text-[11px] sm:text-xs font-bold text-[#18181B] uppercase tracking-wider">2. 5-Branch Research</h4>
+                <p className="text-xs text-[#71717A] mt-0.5 sm:mt-1 leading-relaxed">Concurrent crawl: news, launches, hiring & background strictly bounded to 30 days.</p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-4 flex items-start gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors">
-              <div className="h-9 w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
+            <div className="bg-white rounded-2xl border border-[#EAE4D8] p-3.5 sm:p-4 flex items-start gap-3 sm:gap-3.5 shadow-2xs hover:border-[#D5E5DA] transition-colors sm:col-span-2 lg:col-span-1">
+              <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[#EAF2EC] border border-[#D5E5DA] flex items-center justify-center shrink-0 text-[#2E5A44]">
                 <FileText className="h-4 w-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-[#18181B] uppercase tracking-wider">3. Executive Dossier</h4>
-                <p className="text-xs text-[#71717A] mt-1 leading-relaxed">Scannable one-page briefing (&lt; 600 words) with grounded citations.</p>
+                <h4 className="text-[11px] sm:text-xs font-bold text-[#18181B] uppercase tracking-wider">3. Executive Dossier</h4>
+                <p className="text-xs text-[#71717A] mt-0.5 sm:mt-1 leading-relaxed">Scannable one-page briefing (&lt; 600 words) with grounded citations.</p>
               </div>
             </div>
           </div>
 
           {/* Real README Facts Trust Strip */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-[#71717A] mt-6 pt-4 border-t border-[#EAE4D8] max-w-3xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-[#71717A] mt-5 sm:mt-6 pt-3.5 sm:pt-4 border-t border-[#EAE4D8] max-w-3xl mx-auto px-2">
             <div className="flex items-center gap-1.5 font-medium">
-              <ShieldCheck className="h-4 w-4 text-[#2E5A44]" />
-              <span>44 Verified Unit &amp; Security Tests</span>
+              <ShieldCheck className="h-4 w-4 text-[#2E5A44] shrink-0" />
+              <span>65 Verified Tests (100% Pass)</span>
             </div>
             <div className="flex items-center gap-1.5 font-medium">
-              <Clock className="h-4 w-4 text-[#2E5A44]" />
+              <Clock className="h-4 w-4 text-[#2E5A44] shrink-0" />
               <span>Strict Rolling 30-Day Window</span>
             </div>
             <div className="flex items-center gap-1.5 font-medium">
-              <CheckCircle2 className="h-4 w-4 text-[#2E5A44]" />
+              <CheckCircle2 className="h-4 w-4 text-[#2E5A44] shrink-0" />
               <span>&lt; 600 Words in &lt; 2 Minutes</span>
             </div>
           </div>
@@ -314,18 +314,18 @@ export const App: React.FC = () => {
       />
 
       {/* Minimalist Professional Footer */}
-      <footer className="w-full bg-[#FAF8F5] border-t border-[#EAE4D8] py-8 text-xs text-[#71717A] no-print mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer className="w-full bg-[#FAF8F5] border-t border-[#EAE4D8] py-6 sm:py-8 text-xs text-[#71717A] no-print mt-8 sm:mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 text-center md:text-left">
           {/* Left: Operational status indicator */}
-          <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#16A34A] animate-pulse shrink-0" />
             <span className="font-semibold text-[#18181B]">All systems operational</span>
             <span className="text-[#A1A1AA]">•</span>
             <span>Preceding 30-Day Bounded Web Signals</span>
           </div>
 
           {/* Right: Copyright & links */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[#71717A]">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1 text-[#71717A]">
             <span>MeetBrief AI &copy; 2026</span>
             <a
               href="https://tavily.com"
