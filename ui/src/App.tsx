@@ -13,7 +13,6 @@ import {
 } from './types/briefing';
 import {
   AlertTriangle,
-  Sparkles,
   User,
   Globe,
   FileText,
@@ -206,12 +205,6 @@ export const App: React.FC = () => {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4 max-w-3xl mx-auto pt-2 pb-2">
-          {/* Autonomous Meeting Intelligence Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] text-xs font-semibold shadow-2xs">
-            <Sparkles className="h-3.5 w-3.5 text-[#2E5A44]" />
-            <span>Autonomous Meeting Intelligence</span>
-          </div>
-
           {/* Hero Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#18181B] tracking-tight leading-tight">
             Enter Every Meeting{' '}
