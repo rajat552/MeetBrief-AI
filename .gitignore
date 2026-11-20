@@ -74,7 +74,6 @@ scratch/
 tmp/
 
 # Documentation & Audit Reference
-understanding.md
 testing-plan.md
 workflows.md
 architecture.md
