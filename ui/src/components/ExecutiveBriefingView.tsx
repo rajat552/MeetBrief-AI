@@ -85,45 +85,45 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
   `.trim();
 
   return (
-    <div className="tavily-card p-6 sm:p-8 mt-6 space-y-6 print-page">
+    <div className="tavily-card p-4 sm:p-6 md:p-8 mt-6 space-y-5 sm:space-y-6 print-page">
       {/* Dossier Header Banner */}
-      <div className="border-b border-[#EAE4D8] pb-5">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="border-b border-[#EAE4D8] pb-4 sm:pb-5">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
           <div>
             <div className="flex items-center space-x-2 text-[11px] font-bold uppercase tracking-wider text-[#2E5A44] mb-1">
               <span>Executive Intelligence Dossier</span>
               <span>•</span>
               <span>Preceding 30 Days</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#18181B] tracking-tight flex items-center gap-2">
+            <h1 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-[#18181B] tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2 break-words">
               <span>{briefing.target_company}</span>
               <span className="text-[#A1A1AA] font-light">—</span>
               <span className="text-[#3F3F46] font-semibold">{briefing.target_attendee}</span>
             </h1>
-            <p className="text-xs text-[#71717A] mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <p className="text-xs text-[#71717A] mt-1.5 flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1">
               <span className="flex items-center gap-1 font-medium">
-                <Calendar className="h-3.5 w-3.5 text-[#2E5A44]" />
+                <Calendar className="h-3.5 w-3.5 text-[#2E5A44] shrink-0" />
                 {briefing.meeting_datetime}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Target className="h-3.5 w-3.5 text-[#8C8C94]" />
+                <Target className="h-3.5 w-3.5 text-[#8C8C94] shrink-0" />
                 {briefing.meeting_goal || 'Strategic Discussion'}
               </span>
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between lg:justify-end gap-2.5 sm:gap-3 w-full lg:w-auto pt-1 lg:pt-0">
             {/* Confidence & Route Badges */}
-            <div className="flex items-center gap-2">
-              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] text-xs font-semibold shadow-2xs">
-                <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A]" />
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <div className="inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-[#EAF2EC] text-[#2E5A44] border border-[#D5E5DA] text-[11px] sm:text-xs font-semibold shadow-2xs whitespace-nowrap">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A] shrink-0" />
                 <span>{Math.round(briefing.aggregate_confidence * 100)}% Fact Grounded</span>
               </div>
 
               {briefing.inference_route && (
                 <div
-                  className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold shadow-2xs ${
+                  className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-[10px] sm:text-[11px] font-semibold shadow-2xs whitespace-nowrap ${
                     briefing.inference_route === 'bifrost_gateway'
                       ? 'bg-[#EAF2EC] text-[#2E5A44] border-[#D5E5DA]'
                       : briefing.inference_route === 'direct_provider_fallback'
@@ -133,11 +133,11 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
                   title={`Inference route: ${briefing.inference_route}`}
                 >
                   {briefing.inference_route === 'bifrost_gateway' ? (
-                    <ShieldCheck className="h-3 w-3 text-[#16A34A]" />
+                    <ShieldCheck className="h-3 w-3 text-[#16A34A] shrink-0" />
                   ) : briefing.inference_route === 'direct_provider_fallback' ? (
-                    <Zap className="h-3 w-3 text-[#2563EB]" />
+                    <Zap className="h-3 w-3 text-[#2563EB] shrink-0" />
                   ) : (
-                    <Cpu className="h-3 w-3 text-[#71717A]" />
+                    <Cpu className="h-3 w-3 text-[#71717A] shrink-0" />
                   )}
                   <span>
                     {briefing.inference_route === 'bifrost_gateway'
@@ -159,9 +159,9 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
       <AudioBriefingPlayer briefing={briefing} />
 
       {/* Grid of Cards: 6-Card Executive Structure */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
         {/* Card 1: Executive Snapshot */}
-        <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE4D8] space-y-2">
           <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-[#18181B]">
             <Sparkles className="h-4 w-4 text-[#2E5A44]" />
             <span>1. Executive Snapshot</span>
@@ -345,12 +345,12 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
           </button>
 
           {showClaimsDrawer && (
-            <div className="p-5 space-y-3 bg-white divide-y divide-[#EAE4D8]">
+            <div className="p-4 sm:p-5 space-y-3 bg-white divide-y divide-[#EAE4D8]">
               {briefing.verified_claims.map((claim, idx) => (
                 <div key={idx} className="pt-3 first:pt-0 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold text-[#18181B]">{claim.claim}</span>
-                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase shrink-0 border ${
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
+                    <span className="font-semibold text-[#18181B] leading-snug">{claim.claim}</span>
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase shrink-0 border self-start sm:self-auto ${
                       claim.verification_status === 'VERIFIED_PRIMARY'
                         ? 'bg-[#EAF2EC] text-[#2E5A44] border-[#D5E5DA]'
                         : claim.verification_status === 'REPORTED_SECONDARY'
@@ -363,15 +363,15 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
                     </span>
                   </div>
                   {claim.source_passage && (
-                    <blockquote className="pl-3 border-l-2 border-[#2E5A44] text-[#52525B] italic text-[11px] bg-[#FAF8F5] py-1 rounded-r">
+                    <blockquote className="pl-3 border-l-2 border-[#2E5A44] text-[#52525B] italic text-[11px] bg-[#FAF8F5] py-1 rounded-r leading-relaxed">
                       "{claim.source_passage}"
                     </blockquote>
                   )}
-                  <div className="flex items-center space-x-2 text-[11px] text-[#71717A]">
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-[#71717A]">
                     <span>Source:</span>
-                    <a href={claim.source_url} target="_blank" rel="noreferrer" className="text-[#2E5A44] hover:underline flex items-center gap-1 font-medium">
-                      <span>{claim.source_title || claim.source_url}</span>
-                      <ExternalLink className="h-2.5 w-2.5" />
+                    <a href={claim.source_url} target="_blank" rel="noreferrer" className="text-[#2E5A44] hover:underline flex items-center gap-1 font-medium break-all sm:break-normal">
+                      <span className="line-clamp-1">{claim.source_title || claim.source_url}</span>
+                      <ExternalLink className="h-2.5 w-2.5 shrink-0" />
                     </a>
                   </div>
                 </div>
