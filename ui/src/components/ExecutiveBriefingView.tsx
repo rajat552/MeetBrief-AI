@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { OnePageBriefing, ResearchFinding } from '../types/briefing';
 import { ExportToolbar } from './ExportToolbar';
+import { AudioBriefingPlayer } from './AudioBriefingPlayer';
 
 interface ExecutiveBriefingViewProps {
   briefing: OnePageBriefing | null;
@@ -153,6 +154,9 @@ ${briefing.card6_risk_blindspots.map(q => `- ${q}`).join('\n')}
           </div>
         </div>
       </div>
+
+      {/* 90s Executive Audio Briefing Player (Omnidimension Voice AI) */}
+      <AudioBriefingPlayer briefing={briefing} />
 
       {/* Grid of Cards: 6-Card Executive Structure */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
