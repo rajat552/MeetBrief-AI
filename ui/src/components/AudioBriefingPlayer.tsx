@@ -205,45 +205,45 @@ export const AudioBriefingPlayer: React.FC<AudioBriefingPlayerProps> = ({ briefi
   };
 
   return (
-    <div className="w-full bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 rounded-2xl p-4 sm:p-5 text-white shadow-lg border border-indigo-500/20 mb-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="w-full bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 rounded-2xl p-3.5 sm:p-5 text-white shadow-lg border border-indigo-500/20 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         {/* Left info badge */}
-        <div className="flex items-center space-x-3.5">
-          <div className="h-11 w-11 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner">
+        <div className="flex items-center space-x-3 sm:space-x-3.5 min-w-0">
+          <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shadow-inner shrink-0">
             {isPlaying ? (
               <Radio className="h-5 w-5 text-indigo-400 animate-pulse" />
             ) : (
               <Headphones className="h-5 w-5 text-indigo-300" />
             )}
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="font-semibold text-sm tracking-tight text-white">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="font-semibold text-sm tracking-tight text-white whitespace-nowrap">
                 90s Executive Audio Brief
               </span>
               {audioData?.provider === 'omnidimension' ? (
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium flex items-center gap-1 whitespace-nowrap">
                   <Sparkles className="h-2.5 w-2.5" />
                   Omnidimension Voice AI
                 </span>
               ) : (
-                <span className="text-[10px] bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 px-2 py-0.5 rounded-full font-medium">
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
                   Voice Assistant Mode
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-300 mt-0.5">
-              Spoken audio briefing for commute & pre-meeting review • {briefing.target_attendee} ({briefing.target_company})
+            <p className="text-xs text-slate-300 mt-0.5 line-clamp-1 sm:line-clamp-none">
+              Spoken briefing for commute & pre-meeting review • {briefing.target_attendee} ({briefing.target_company})
             </p>
           </div>
         </div>
 
         {/* Right audio controls */}
-        <div className="flex items-center space-x-3 self-end sm:self-center">
+        <div className="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-between sm:justify-start pt-1 sm:pt-0">
           {/* Speed Toggle */}
           <button
             onClick={cycleSpeed}
-            className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-indigo-200 transition-colors"
+            className="h-10 px-2.5 py-1 text-xs font-semibold rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-indigo-200 transition-colors shrink-0"
             title="Toggle playback speed"
           >
             {playbackRate}x
@@ -252,11 +252,11 @@ export const AudioBriefingPlayer: React.FC<AudioBriefingPlayerProps> = ({ briefi
           {/* Transcript view toggle */}
           <button
             onClick={() => setShowScript(!showScript)}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center space-x-1 transition-colors"
+            className="h-10 px-2.5 sm:px-3 py-1 text-xs font-medium rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center space-x-1 transition-colors shrink-0"
             title="Read spoken transcript"
           >
-            <FileText className="h-3 w-3" />
-            <span className="hidden sm:inline">Script</span>
+            <FileText className="h-3.5 w-3.5" />
+            <span className="hidden xs:inline">Script</span>
             {showScript ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </button>
 
@@ -264,7 +264,7 @@ export const AudioBriefingPlayer: React.FC<AudioBriefingPlayerProps> = ({ briefi
           <button
             onClick={handleTogglePlay}
             disabled={isLoading}
-            className={`h-10 px-4 rounded-xl flex items-center space-x-2 font-semibold text-xs shadow-md transition-all ${
+            className={`h-10 px-3.5 sm:px-4 rounded-xl flex-1 sm:flex-none flex items-center justify-center space-x-2 font-semibold text-xs shadow-md transition-all ${
               isPlaying
                 ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20'
                 : 'bg-indigo-500 hover:bg-indigo-400 text-white shadow-indigo-500/25'
@@ -283,7 +283,7 @@ export const AudioBriefingPlayer: React.FC<AudioBriefingPlayerProps> = ({ briefi
             ) : (
               <>
                 <Play className="h-4 w-4 fill-current ml-0.5" />
-                <span>Listen Audio (90s)</span>
+                <span className="whitespace-nowrap">Listen (90s)</span>
               </>
             )}
           </button>
@@ -291,27 +291,27 @@ export const AudioBriefingPlayer: React.FC<AudioBriefingPlayerProps> = ({ briefi
       </div>
 
       {/* Progress scrub bar */}
-      <div className="mt-3.5 pt-3 border-t border-slate-800/80 flex items-center space-x-3">
-        <span className="text-[11px] font-mono text-slate-400 w-9 text-right">
+      <div className="mt-3 sm:mt-3.5 pt-2.5 sm:pt-3 border-t border-slate-800/80 flex items-center space-x-2.5 sm:space-x-3">
+        <span className="text-[11px] font-mono text-slate-400 w-8 sm:w-9 text-right shrink-0">
           {formatTime(currentTime)}
         </span>
-        <div className="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden relative">
+        <div className="flex-1 bg-slate-800 h-2 sm:h-2 rounded-full overflow-hidden relative">
           <div
             className="bg-gradient-to-r from-indigo-500 to-indigo-400 h-full rounded-full transition-all duration-300"
             style={{ width: `${Math.min(100, (currentTime / duration) * 100)}%` }}
           />
         </div>
-        <span className="text-[11px] font-mono text-slate-400 w-9">
+        <span className="text-[11px] font-mono text-slate-400 w-8 sm:w-9 shrink-0">
           {formatTime(duration)}
         </span>
       </div>
 
       {/* Spoken Transcript Accordion */}
       {showScript && (
-        <div className="mt-3.5 p-3.5 bg-slate-950/60 rounded-xl border border-indigo-500/20 text-xs text-slate-200 leading-relaxed animate-fadeIn">
-          <div className="flex items-center justify-between mb-1.5 text-indigo-300 font-semibold text-[11px] uppercase tracking-wider">
+        <div className="mt-3 p-3 sm:p-3.5 bg-slate-950/60 rounded-xl border border-indigo-500/20 text-xs text-slate-200 leading-relaxed animate-fadeIn max-h-52 overflow-y-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5 text-indigo-300 font-semibold text-[11px] uppercase tracking-wider">
             <span>🎙️ Spoken Executive Script (~{audioData?.duration_estimated_seconds || 90}s)</span>
-            <span className="text-slate-400 normal-case font-normal">
+            <span className="text-slate-400 normal-case font-normal text-[10px] sm:text-xs">
               {audioData?.provider === 'omnidimension' ? 'Synthesized via Omnidimension' : 'Web Speech Synthesizer'}
             </span>
           </div>
