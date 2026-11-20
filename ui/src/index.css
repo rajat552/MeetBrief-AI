@@ -31,11 +31,19 @@
   * {
     border-color: var(--glass-border);
   }
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
   body {
     background-color: var(--bg);
     color: var(--text);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     @apply antialiased selection:bg-[#2E5A44] selection:text-white;
+  }
+  button, a, input, select, textarea {
+    touch-action: manipulation;
   }
 }
 
@@ -46,6 +54,12 @@
   border-radius: 20px;
   box-shadow: 0 1px 3px rgba(24, 24, 27, 0.03), 0 6px 16px -4px rgba(24, 24, 27, 0.04);
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+@media (max-width: 640px) {
+  .glass-card, .tavily-card {
+    border-radius: 16px;
+  }
 }
 
 .glass-card-hover:hover, .tavily-card-hover:hover {
