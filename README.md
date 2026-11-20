@@ -27,7 +27,7 @@
 </p>
 
 <p align="center">
-  <a href="https://meetbrief-ai-j8yo.onrender.com"><strong>🚀 Live Demo</strong></a> · 
+  <a href="https://meet-brief-ai-sigma.vercel.app/"><strong>🚀 Live Demo</strong></a> · 
   <a href="#-system-architecture"><strong>Architecture</strong></a> · 
   <a href="#-quick-start-guide"><strong>Quick Start</strong></a> · 
   <a href="#-verification--test-suite"><strong>Test Suite (65/65)</strong></a> · 
