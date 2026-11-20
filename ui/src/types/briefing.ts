@@ -102,3 +102,13 @@ export interface ClaimsVerifiedEvent {
   reported_count: number;
   conflicted_count: number;
 }
+
+export interface AudioBriefingResponse {
+  spoken_script: string;
+  duration_estimated_seconds: number;
+  provider: 'omnidimension' | 'browser_tts_fallback';
+  voice_id: string;
+  audio_base64?: string;
+  audio_url?: string;
+  generated_at: string;
+}
