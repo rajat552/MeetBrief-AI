@@ -1,24 +1,38 @@
-<div align="center">
+# MeetBrief AI
 
-# ⚡ MeetBrief AI
-### Autonomous Meeting Intelligence — Evidence-Grounded Executive Briefings in Under 2 Minutes
+```text
+███╗   ███╗███████╗███████╗████████╗██████╗ ██████╗ ██╗███████╗███████╗     █████╗ ██╗
+████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║██╔════╝██╔════╝    ██╔══██╗██║
+██╔████╔██║█████╗  █████╗     ██║   ██████╔╝██████╔╝██║█████╗  █████╗      ███████║██║
+██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ██╔══██╗██╔══██╗██║██╔══╝  ██╔══╝      ██╔══██║██║
+██║ ╚═╝ ██║███████╗███████╗   ██║   ██████╔╝██║  ██║██║███████╗██║         ██║  ██║██║
+╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝         ╚═╝  ╚═╝╚═╝
+```
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-meetbrief--ai.onrender.com-00C7B7?style=for-the-badge&logo=render&logoColor=white)](https://meetbrief-ai-j8yo.onrender.com)
+<h3 align="center">Autonomous Multi-Agent Pre-Meeting Intelligence & Executive Briefings</h3>
+<h4 align="center">Official Submission for Geek Room Global AI Hackathon 2026 (Geek Room & HackCulture) — Problem Statement 05</h4>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React 18](https://img.shields.io/badge/React-18.3-61DAFB.svg?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-FF6F00.svg?style=flat-square)](https://langchain-ai.github.io/langgraph/)
-[![Tavily Search](https://img.shields.io/badge/Tavily-Web_Intelligence-4F46E5.svg?style=flat-square)](https://tavily.com)
-[![Bifrost Gateway](https://img.shields.io/badge/Bifrost_Gateway-v2.3.1-6366F1.svg?style=flat-square)](https://github.com/maximhq/bifrost)
-[![Tests: 49 Passed](https://img.shields.io/badge/Tests-49%20Passed-brightgreen.svg?style=flat-square)](tests/)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.11+"></a>
+  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-18.3-61DAFB.svg?style=flat-square&logo=react&logoColor=black" alt="React 18.3"></a>
+  <a href="https://langchain-ai.github.io/langgraph/"><img src="https://img.shields.io/badge/LangGraph-Multi--Agent-FF6F00.svg?style=flat-square" alt="LangGraph"></a>
+  <a href="https://github.com/maximhq/bifrost"><img src="https://img.shields.io/badge/Bifrost_Gateway-v2.6.0-6366F1.svg?style=flat-square" alt="Bifrost Gateway"></a>
+  <a href="https://tavily.com"><img src="https://img.shields.io/badge/Tavily-Web_Intelligence-4F46E5.svg?style=flat-square" alt="Tavily Search"></a>
+  <a href="https://omnidimension.ai"><img src="https://img.shields.io/badge/Voice_AI-Omnidimension-0ea5e9.svg?style=flat-square" alt="Omnidimension Voice AI"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/Tests-65_Passed_(100%25)-brightgreen.svg?style=flat-square" alt="Tests: 65 Passed"></a>
+  <a href="#-verification--test-suite"><img src="https://img.shields.io/badge/Coverage-91%25-success.svg?style=flat-square" alt="Coverage: 91%"></a>
+  <a href="#-system-architecture"><img src="https://img.shields.io/badge/Architecture-Multi--Agent_Graph-8B5CF6.svg?style=flat-square" alt="Architecture"></a>
+</p>
 
-**Built for Problem Statement 05 — Geek Room Global AI Hackathon 2026**
-
-[Explore Live Demo](https://meetbrief-ai-j8yo.onrender.com) · [Architecture](#-system-architecture) · [Quick Start](#-quick-start-guide) · [Test Suite (49/49)](#-verification--test-suite) · [Hackathon Compliance](#-problem-statement-05-compliance)
-
-</div>
+<p align="center">
+  <a href="https://meetbrief-ai-j8yo.onrender.com"><strong>🚀 Live Demo</strong></a> · 
+  <a href="#-system-architecture"><strong>Architecture</strong></a> · 
+  <a href="#-quick-start-guide"><strong>Quick Start</strong></a> · 
+  <a href="#-verification--test-suite"><strong>Test Suite (65/65)</strong></a> · 
+  <a href="#-problem-statement-05-compliance"><strong>Hackathon Compliance</strong></a>
+</p>
 
 ---
 
@@ -214,7 +228,7 @@ docker compose up --build -d
 
 ## 🧪 Verification & Test Suite
 
-MeetBrief AI includes **49 comprehensive automated tests** with 100% pass rate:
+MeetBrief AI includes **65 comprehensive automated tests** with 100% pass rate:
 
 ```bash
 pytest tests/ -v
