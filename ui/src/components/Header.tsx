@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Sparkles, Cpu, ExternalLink } from 'lucide-react';
+import { Zap, Briefcase, Cpu, ExternalLink } from 'lucide-react';
 import { GatewayStatusEvent } from '../types/briefing';
 
 interface HeaderProps {
@@ -13,7 +13,7 @@ export const Header: React.FC<HeaderProps> = ({ gatewayStatus }) => {
         {/* Brand Logo & Name */}
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#2E5A44] to-[#4E876F] flex items-center justify-center text-white shadow-sm shadow-[#2E5A44]/20">
-            <Sparkles className="h-5 w-5" />
+            <Briefcase className="h-5 w-5 stroke-[2.2]" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
