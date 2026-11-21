@@ -11,7 +11,8 @@ from pydantic import BaseModel
 
 from backend.agent import MeetBriefOrchestrator
 from backend.config import settings
-from backend.models import ManualMeetingRequest
+from backend.models import AudioBriefingResponse, ManualMeetingRequest, OnePageBriefing
+from backend.voice import AudioBriefingService
 
 app = FastAPI(
     title="MeetBrief AI — Autonomous Meeting Intelligence API",
@@ -61,8 +62,22 @@ async def health_check():
             "reason": gw_status.reason,
             "available_models": gw_status.available_models
         },
-        "research_provider": "Tavily Search API (Configured)" if settings.is_tavily_configured() else "Tavily (Unconfigured)"
+        "research_provider": "Tavily Search API (Configured)" if settings.is_tavily_configured() else "Tavily (Unconfigured)",
+        "voice_provider": "Omnidimension Voice AI (Active)" if settings.is_omnidimension_configured() else "Web Speech Engine (Active)"
     }
+
+
+@app.post("/api/briefings/audio", response_model=AudioBriefingResponse)
+async def generate_audio_briefing(briefing: OnePageBriefing):
+    """
+    Voice AI Endpoint: Generates a 90-second spoken executive audio brief
+    powered by Omnidimension Voice AI with zero-lag Web Speech fallback.
+    """
+    try:
+        service = AudioBriefingService()
+        return await service.generate_audio(briefing)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Audio briefing synthesis failed: {str(e)}")
 
 
 @app.post("/api/briefings/generate")
@@ -126,9 +141,15 @@ if os.path.exists(UI_DIST_DIR):
         if full_path.startswith("api/"):
             raise HTTPException(status_code=404, detail="API route not found")
         file_path = os.path.join(UI_DIST_DIR, full_path)
+        html_headers = {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        }
         if full_path and os.path.exists(file_path) and os.path.isfile(file_path):
-            return FileResponse(file_path)
-        return FileResponse(os.path.join(UI_DIST_DIR, "index.html"))
+            headers = html_headers if file_path.endswith(".html") else None
+            return FileResponse(file_path, headers=headers)
+        return FileResponse(os.path.join(UI_DIST_DIR, "index.html"), headers=html_headers)
 
 
 if __name__ == "__main__":

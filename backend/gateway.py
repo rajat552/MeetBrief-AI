@@ -302,87 +302,122 @@ class BifrostClient:
         Explicitly records mode='fallback_direct'.
         """
         clean_model = model.split("/")[-1] if "/" in model else model
-        is_groq = "llama" in clean_model.lower() or "mixtral" in clean_model.lower()
-        
         start_time = time.perf_counter()
 
-        if is_groq and self.config.is_groq_configured():
-            endpoint = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {self.config.GROQ_API_KEY}",
-                "Content-Type": "application/json"
+        # Build candidate providers
+        all_candidates: Dict[str, Dict[str, Any]] = {}
+
+        if self.config.is_openai_configured():
+            all_candidates["openai"] = {
+                "provider": "openai",
+                "endpoint": "https://api.openai.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": f"Bearer {self.config.OPENAI_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                "model": "gpt-4o-mini" if ("gemini" in clean_model.lower() or "llama" in clean_model.lower()) else clean_model
             }
-            actual_model = clean_model
-            provider_name = "groq"
-        elif self.config.is_openai_configured():
-            endpoint = "https://api.openai.com/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {self.config.OPENAI_API_KEY}",
-                "Content-Type": "application/json"
+
+        if self.config.is_groq_configured():
+            all_candidates["groq"] = {
+                "provider": "groq",
+                "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+                "headers": {
+                    "Authorization": f"Bearer {self.config.GROQ_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                "model": clean_model if ("qwen" in clean_model.lower() or "gpt-oss" in clean_model.lower()) else "qwen/qwen3.8-27b"
             }
-            actual_model = clean_model if not is_groq else "gpt-4o-mini"
-            provider_name = "openai"
-        elif self.config.is_gemini_configured():
-            endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {self.config.GEMINI_API_KEY}",
-                "Content-Type": "application/json"
+
+        if self.config.is_gemini_configured():
+            all_candidates["gemini"] = {
+                "provider": "gemini",
+                "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+                "headers": {
+                    "Authorization": f"Bearer {self.config.GEMINI_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                "model": "gemini-flash-lite-latest"
             }
-            actual_model = "gemini-flash-lite-latest"
-            provider_name = "gemini"
+
+        # Order candidates prioritizing the provider matching the model
+        model_lower = model.lower()
+        if "openai" in model_lower or "gpt" in model_lower:
+            preferred_order = ["openai", "groq", "gemini"]
+        elif "gemini" in model_lower:
+            preferred_order = ["gemini", "groq", "openai"]
+        elif "groq" in model_lower or "llama" in model_lower:
+            preferred_order = ["groq", "openai", "gemini"]
         else:
-            # Deterministic offline template fallback if no direct keys are set
-            elapsed_ms = (time.perf_counter() - start_time) * 1000
-            return GatewayResponse(
-                content=f"[DETERMINISTIC FALLBACK MODE: {fallback_reason}] Direct provider keys not configured.",
-                telemetry=GatewayTelemetry(
-                    request_id="deterministic_fallback_req",
-                    latency_ms=round(elapsed_ms, 2),
-                    upstream_latency_ms=None,
-                    cache_hit=False,
-                    provider="deterministic_engine",
-                    model=model,
-                    tokens_prompt=0,
-                    tokens_completion=0,
-                    cost_usd=0.0,
-                    mode="deterministic_fallback"
-                ),
-                raw_response={"deterministic_fallback": True, "fallback_reason": fallback_reason}
-            )
+            preferred_order = ["groq", "gemini", "openai"]
 
-        payload = {
-            "model": actual_model,
-            "messages": messages,
-            "temperature": temperature,
-        }
-        if max_tokens:
-            payload["max_tokens"] = max_tokens
+        candidates = [all_candidates[p] for p in preferred_order if p in all_candidates]
 
-        async with httpx.AsyncClient(timeout=45.0) as client:
-            res = await client.post(endpoint, headers=headers, json=payload)
-            elapsed_ms = (time.perf_counter() - start_time) * 1000
+        last_error = None
+        for cand in candidates:
+            provider_name = cand["provider"]
+            actual_model = cand["model"]
+            payload = {
+                "model": actual_model,
+                "messages": messages,
+                "temperature": temperature,
+            }
+            if max_tokens:
+                payload["max_tokens"] = max_tokens
 
-            if res.status_code != 200:
-                raise RuntimeError(f"Direct provider ({provider_name}) returned HTTP {res.status_code}: {res.text}")
+            try:
+                async with httpx.AsyncClient(timeout=45.0) as client:
+                    res = await client.post(cand["endpoint"], headers=cand["headers"], json=payload)
+                    elapsed_ms = (time.perf_counter() - start_time) * 1000
 
-            data = res.json()
-            content = data["choices"][0]["message"]["content"] or ""
-            usage = data.get("usage", {})
+                    if res.status_code == 200:
+                        data = res.json()
+                        content = data["choices"][0]["message"]["content"] or ""
+                        usage = data.get("usage", {})
 
-            telemetry = GatewayTelemetry(
-                request_id=data.get("id"),
+                        telemetry = GatewayTelemetry(
+                            request_id=data.get("id"),
+                            latency_ms=round(elapsed_ms, 2),
+                            upstream_latency_ms=None,
+                            cache_hit=False,
+                            provider=provider_name,
+                            model=actual_model,
+                            tokens_prompt=usage.get("prompt_tokens"),
+                            tokens_completion=usage.get("completion_tokens"),
+                            cost_usd=None,
+                            mode="direct_provider_fallback"
+                        )
+                        return GatewayResponse(
+                            content=content,
+                            telemetry=telemetry,
+                            raw_response=data
+                        )
+                    else:
+                        logger.warning(f"Direct provider ({provider_name}) returned HTTP {res.status_code}: {res.text[:120]}")
+                        last_error = f"{provider_name} HTTP {res.status_code}"
+            except Exception as e:
+                logger.warning(f"Direct provider ({provider_name}) connection error: {e}")
+                last_error = f"{provider_name} error: {e}"
+
+        # If all candidates fail or no direct keys, use deterministic offline fallback
+        elapsed_ms = (time.perf_counter() - start_time) * 1000
+        combined_reason = f"{fallback_reason} (Fallback attempts: {last_error or 'none configured'})"
+        return GatewayResponse(
+            content=f"[DETERMINISTIC FALLBACK MODE: {combined_reason}]",
+            telemetry=GatewayTelemetry(
+                request_id="deterministic_fallback_req",
                 latency_ms=round(elapsed_ms, 2),
                 upstream_latency_ms=None,
                 cache_hit=False,
-                provider=provider_name,
-                model=actual_model,
-                tokens_prompt=usage.get("prompt_tokens"),
-                tokens_completion=usage.get("completion_tokens"),
-                cost_usd=None,
-                mode="direct_provider_fallback"
-            )
-
-            return GatewayResponse(content=content, telemetry=telemetry, raw_response=data)
+                provider="deterministic_engine",
+                model=model,
+                tokens_prompt=0,
+                tokens_completion=0,
+                cost_usd=0.0,
+                mode="deterministic_fallback"
+            ),
+            raw_response={"deterministic_fallback": True, "fallback_reason": combined_reason}
+        )
 
     async def stream(
         self,

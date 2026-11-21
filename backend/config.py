@@ -72,6 +72,22 @@ class Settings(BaseSettings):
     )
 
     # --------------------------------------------------------------------------
+    # Omnidimension Voice AI Configuration (Community Partner)
+    # --------------------------------------------------------------------------
+    OMNIDIMENSION_API_KEY: str = Field(
+        default="",
+        description="API key for Omnidimension Voice AI executive audio briefings"
+    )
+    OMNIDIMENSION_BASE_URL: str = Field(
+        default="https://api.omnidimension.ai/v1",
+        description="Base URL for Omnidimension Voice AI endpoint"
+    )
+    OMNIDIMENSION_VOICE_ID: str = Field(
+        default="executive-en-neutral",
+        description="Voice persona ID for executive narration"
+    )
+
+    # --------------------------------------------------------------------------
     # Server & Runtime Configuration
     # --------------------------------------------------------------------------
     HOST: str = Field(default="127.0.0.1", description="API server host")
@@ -108,6 +124,10 @@ class Settings(BaseSettings):
     def is_tavily_configured(self) -> bool:
         """Checks if Tavily search API key is set."""
         return bool(self.TAVILY_API_KEY and len(self.TAVILY_API_KEY) > 5)
+
+    def is_omnidimension_configured(self) -> bool:
+        """Checks if Omnidimension Voice AI API key is set."""
+        return bool(self.OMNIDIMENSION_API_KEY and len(self.OMNIDIMENSION_API_KEY.strip()) > 5)
 
 
 # Global settings singleton
