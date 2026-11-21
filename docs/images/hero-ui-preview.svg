@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%" style="background:#080B11; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <radialGradient id="goldGlow" cx="50%" cy="0%" r="65%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#080B11" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldBrand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E5C07B"/>
+    </linearGradient>
+    <linearGradient id="btnGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background Aura -->
+  <rect width="1200" height="680" fill="#080B11"/>
+  <rect width="1200" height="400" fill="url(#goldGlow)"/>
+
+  <!-- Top Navigation Bar -->
+  <g transform="translate(60, 24)">
+    <rect width="1080" height="64" rx="16" fill="#101522" fill-opacity="0.8" stroke="rgba(212, 175, 55, 0.3)" stroke-width="1.2" filter="url(#cardShadow)"/>
+    
+    <!-- Logo -->
+    <rect x="20" y="14" width="36" height="36" rx="10" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-opacity="0.4"/>
+    <path d="M38 21 L31 32 L37 32 L36 43 L45 30 L39 30 Z" fill="#D4AF37"/>
+    <text x="68" y="38" fill="#F8FAFC" font-size="18" font-weight="bold">MeetBrief<tspan fill="url(#goldBrand)">.AI</tspan></text>
+    <rect x="180" y="24" width="48" height="18" rx="9" fill="rgba(212, 175, 55, 0.15)" stroke="rgba(212, 175, 55, 0.3)"/>
+    <text x="204" y="37" fill="#F3E5AB" font-size="10" font-weight="bold" text-anchor="middle">v2.4</text>
+
+    <!-- Gateway Pill & Calendar Button -->
+    <rect x="740" y="18" width="180" height="28" rx="14" fill="#080B11" stroke="rgba(212, 175, 55, 0.25)"/>
+    <circle cx="756" cy="32" r="4" fill="#34D399"/>
+    <text x="768" y="36" fill="#94A3B8" font-size="11">Gateway: <tspan fill="#34D399" font-weight="600">Bifrost Active</tspan></text>
+
+    <rect x="935" y="16" width="125" height="32" rx="10" fill="#101522" stroke="rgba(212, 175, 55, 0.35)"/>
+    <text x="997" y="36" fill="#F3E5AB" font-size="11" font-weight="600" text-anchor="middle">Connect Calendar</text>
+  </g>
+
+  <!-- Hero Headline -->
+  <g transform="translate(60, 110)">
+    <!-- Pill Badge -->
+    <rect x="420" y="0" width="240" height="26" rx="13" fill="#101522" stroke="rgba(212, 175, 55, 0.3)"/>
+    <circle cx="436" cy="13" r="3" fill="#D4AF37"/>
+    <text x="546" y="17" fill="#D4AF37" font-size="11" font-weight="600" text-anchor="middle">⚡ Autonomous Pre-Meeting Intelligence</text>
+
+    <!-- Main Title -->
+    <text x="540" y="58" fill="#F8FAFC" font-size="34" font-weight="800" text-anchor="middle">
+      Enter Every Meeting <tspan fill="url(#goldBrand)">Better Informed</tspan>
+    </text>
+    <text x="540" y="86" fill="#94A3B8" font-size="13" text-anchor="middle">
+      Transform recent web intelligence into a scannable, source-grounded executive briefing covering the preceding 30 days.
+    </text>
+
+    <!-- 3-Step Glass Strip -->
+    <g transform="translate(90, 110)">
+      <!-- Step 1 -->
+      <rect x="0" y="0" width="280" height="58" rx="14" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.22)"/>
+      <circle cx="30" cy="29" r="14" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="33" fill="#D4AF37" font-size="12" font-weight="bold" text-anchor="middle">1</text>
+      <text x="54" y="24" fill="#F3E5AB" font-size="11" font-weight="bold">MEETING CONTEXT</text>
+      <text x="54" y="42" fill="#94A3B8" font-size="10">Target company, attendee, &amp; date</text>
+
+      <!-- Step 2 -->
+      <rect x="310" y="0" width="280" height="58" rx="14" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.22)"/>
+      <circle cx="340" cy="29" r="14" fill="rgba(229, 192, 123, 0.15)"/>
+      <text x="340" y="33" fill="#E5C07B" font-size="12" font-weight="bold" text-anchor="middle">2</text>
+      <text x="364" y="24" fill="#F3E5AB" font-size="11" font-weight="bold">5-BRANCH RESEARCH</text>
+      <text x="364" y="42" fill="#94A3B8" font-size="10">Parallel crawl strictly bounded to 30d</text>
+
+      <!-- Step 3 -->
+      <rect x="620" y="0" width="280" height="58" rx="14" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.22)"/>
+      <circle cx="650" cy="29" r="14" fill="rgba(52, 211, 153, 0.15)"/>
+      <text x="650" y="33" fill="#34D399" font-size="12" font-weight="bold" text-anchor="middle">3</text>
+      <text x="674" y="24" fill="#F3E5AB" font-size="11" font-weight="bold">EXECUTIVE DOSSIER</text>
+      <text x="674" y="42" fill="#94A3B8" font-size="10">Scannable 6-card brief &lt; 600 words</text>
+    </g>
+  </g>
+
+  <!-- Main Intelligence Form Card -->
+  <g transform="translate(150, 310)">
+    <rect width="900" height="330" rx="20" fill="#101522" fill-opacity="0.9" stroke="rgba(212, 175, 55, 0.3)" stroke-width="1.2" filter="url(#cardShadow)"/>
+    
+    <!-- Form Header -->
+    <text x="36" y="42" fill="#F3E5AB" font-size="17" font-weight="bold">Generate Intelligence Briefing</text>
+    <text x="36" y="62" fill="#94A3B8" font-size="12">Targeted web research focused specifically on strategic leverage points.</text>
+    <rect x="690" y="26" width="174" height="26" rx="13" fill="#080B11" stroke="rgba(212, 175, 55, 0.35)"/>
+    <text x="777" y="43" fill="#D4AF37" font-size="11" font-weight="bold" text-anchor="middle">Obsidian &amp; Gold Edition</text>
+
+    <line x1="36" y1="80" x2="864" y2="80" stroke="rgba(212, 175, 55, 0.2)"/>
+
+    <!-- Presets -->
+    <text x="36" y="106" fill="#94A3B8" font-size="11" font-weight="600">Quick Scenario Presets:</text>
+    <g transform="translate(36, 118)">
+      <rect x="0" y="0" width="250" height="26" rx="8" fill="#171F32" stroke="#D4AF37" stroke-width="1.2"/>
+      <text x="12" y="17" fill="#F8FAFC" font-size="11">💼 Series B FinTech (Stripe / Patrick Collison)</text>
+
+      <rect x="262" y="0" width="240" height="26" rx="8" fill="#080B11" stroke="rgba(212, 175, 55, 0.25)"/>
+      <text x="274" y="17" fill="#94A3B8" font-size="11">🏢 Enterprise Procurement (Snowflake)</text>
+
+      <rect x="514" y="0" width="220" height="26" rx="8" fill="#080B11" stroke="rgba(212, 175, 55, 0.25)"/>
+      <text x="526" y="17" fill="#94A3B8" font-size="11">📈 Board Advisory (Databricks)</text>
+    </g>
+
+    <!-- Inputs Row -->
+    <g transform="translate(36, 168)">
+      <!-- Input 1 -->
+      <text x="0" y="12" fill="#F3E5AB" font-size="11" font-weight="bold">TARGET COMPANY *</text>
+      <rect x="0" y="22" width="260" height="42" rx="10" fill="#080B11" stroke="rgba(212, 175, 55, 0.4)"/>
+      <text x="14" y="48" fill="#F8FAFC" font-size="13">Stripe</text>
+
+      <!-- Input 2 -->
+      <text x="284" y="12" fill="#F3E5AB" font-size="11" font-weight="bold">ATTENDEE NAME *</text>
+      <rect x="284" y="22" width="260" height="42" rx="10" fill="#080B11" stroke="rgba(212, 175, 55, 0.4)"/>
+      <text x="298" y="48" fill="#F8FAFC" font-size="13">Patrick Collison</text>
+
+      <!-- Input 3 -->
+      <text x="568" y="12" fill="#F3E5AB" font-size="11" font-weight="bold">SCHEDULED DATE &amp; TIME *</text>
+      <rect x="568" y="22" width="260" height="42" rx="10" fill="#080B11" stroke="rgba(212, 175, 55, 0.4)"/>
+      <text x="582" y="48" fill="#F8FAFC" font-size="13">Today, 4:00 PM (UTC)</text>
+    </g>
+
+    <!-- CTA Button -->
+    <g transform="translate(36, 255)">
+      <rect width="828" height="50" rx="12" fill="url(#btnGold)" filter="url(#cardShadow)"/>
+      <path d="M370 25 L376 17 L382 25 Z" fill="#080B11"/>
+      <text x="414" y="32" fill="#080B11" font-size="14" font-weight="800" text-anchor="middle">
+        ⚡ Generate Intelligence Briefing (Strict 30-Day Window)
+      </text>
+    </g>
+  </g>
+</svg>

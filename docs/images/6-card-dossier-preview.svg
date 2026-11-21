@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="100%" height="100%" style="background:#080B11; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <radialGradient id="cardAura" cx="50%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#080B11" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E5C07B"/>
+    </linearGradient>
+    <filter id="shadowBox" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="660" fill="#080B11"/>
+  <rect width="1200" height="300" fill="url(#cardAura)"/>
+
+  <!-- Top Briefing Header Ribbon -->
+  <g transform="translate(60, 24)">
+    <rect width="1080" height="74" rx="16" fill="#101522" fill-opacity="0.9" stroke="rgba(212, 175, 55, 0.3)" stroke-width="1.2" filter="url(#shadowBox)"/>
+    
+    <!-- Attendee Snapshot -->
+    <rect x="20" y="16" width="42" height="42" rx="12" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-opacity="0.4"/>
+    <text x="41" y="42" fill="#F3E5AB" font-size="18" font-weight="bold" text-anchor="middle">PC</text>
+
+    <text x="74" y="34" fill="#F8FAFC" font-size="16" font-weight="bold">Patrick Collison <tspan fill="#94A3B8" font-weight="normal">— CEO, Stripe</tspan></text>
+    <text x="74" y="52" fill="#94A3B8" font-size="12">Objective: <tspan fill="#F3E5AB">Explore enterprise billing integration partnerships &amp; agent rails</tspan></text>
+
+    <!-- Metrics Badges -->
+    <g transform="translate(730, 22)">
+      <rect x="0" y="0" width="150" height="30" rx="10" fill="#080B11" stroke="rgba(52, 211, 153, 0.35)"/>
+      <circle cx="16" cy="15" r="4" fill="#34D399"/>
+      <text x="28" y="19" fill="#34D399" font-size="11" font-weight="bold">92% Grounded (30d)</text>
+
+      <rect x="160" y="0" width="160" height="30" rx="10" fill="#080B11" stroke="rgba(212, 175, 55, 0.35)"/>
+      <text x="240" y="19" fill="#F3E5AB" font-size="11" font-weight="bold" text-anchor="middle">Word Count: 432 / 600</text>
+    </g>
+  </g>
+
+  <!-- 6-Card Executive Dossier Grid -->
+  <g transform="translate(60, 116)">
+    <!-- Card 1: Static Company Profile -->
+    <g transform="translate(0, 0)">
+      <rect width="345" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.25)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="35" fill="#D4AF37" font-size="14" text-anchor="middle">🏢</text>
+      <text x="52" y="35" fill="#F3E5AB" font-size="13" font-weight="bold">1. COMPANY FOUNDATION</text>
+      <line x1="16" y1="54" x2="329" y2="54" stroke="rgba(212, 175, 55, 0.15)"/>
+      
+      <text x="16" y="76" fill="#94A3B8" font-size="11" font-weight="600">BUSINESS MODEL &amp; MOAT</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5" width="310">
+        <tspan x="16" dy="0">Global financial infrastructure processing</tspan>
+        <tspan x="16" dy="16">&gt; $1T annually. Defensible moat rooted in</tspan>
+        <tspan x="16" dy="16">developer developer API ubiquity, multi-sided</tspan>
+        <tspan x="16" dy="16">ecosystem, and zero-churn enterprise billing.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="135" height="22" rx="6" fill="#080B11" stroke="rgba(212, 175, 55, 0.2)"/>
+      <text x="83" y="195" fill="#94A3B8" font-size="10" text-anchor="middle">Tier 1: stripe.com (SEC)</text>
+    </g>
+
+    <!-- Card 2: 30-Day News -->
+    <g transform="translate(365, 0)">
+      <rect width="345" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.25)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="35" fill="#D4AF37" font-size="14" text-anchor="middle">📰</text>
+      <text x="52" y="35" fill="#F3E5AB" font-size="13" font-weight="bold">2. 30-DAY STRATEGIC NEWS</text>
+      <line x1="16" y1="54" x2="329" y2="54" stroke="rgba(212, 175, 55, 0.15)"/>
+
+      <text x="16" y="76" fill="#94A3B8" font-size="11" font-weight="600">MATERIAL DEVELOPMENTS</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5">
+        <tspan x="16" dy="0">• Acquired Bridge for $1.1B to expand</tspan>
+        <tspan x="16" dy="16">  global stablecoin payout architecture.</tspan>
+        <tspan x="16" dy="16">• Launched Open Payment SDK for autonomous</tspan>
+        <tspan x="16" dy="16">  AI agent transactions &amp; micro-metering.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="165" height="22" rx="6" fill="#080B11" stroke="rgba(52, 211, 153, 0.25)"/>
+      <text x="98" y="195" fill="#34D399" font-size="10" font-weight="600" text-anchor="middle">VERIFIED: Bloomberg &bull; TechCrunch</text>
+    </g>
+
+    <!-- Card 3: 30-Day Product Releases -->
+    <g transform="translate(730, 0)">
+      <rect width="350" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.25)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="35" fill="#D4AF37" font-size="14" text-anchor="middle">🚀</text>
+      <text x="52" y="35" fill="#F3E5AB" font-size="13" font-weight="bold">3. PRODUCT &amp; ROADMAP</text>
+      <line x1="16" y1="54" x2="334" y2="54" stroke="rgba(212, 175, 55, 0.15)"/>
+
+      <text x="16" y="76" fill="#94A3B8" font-size="11" font-weight="600">30-DAY RELEASES &amp; APIS</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5">
+        <tspan x="16" dy="0">• Agentic Commerce Suite v2 released</tspan>
+        <tspan x="16" dy="16">  with per-token cost settlement support.</tspan>
+        <tspan x="16" dy="16">• Deprecated legacy v1 Webhooks with a</tspan>
+        <tspan x="16" dy="16">  strict 90-day enterprise migration window.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="150" height="22" rx="6" fill="#080B11" stroke="rgba(212, 175, 55, 0.2)"/>
+      <text x="91" y="195" fill="#94A3B8" font-size="10" text-anchor="middle">Changelog &bull; Developer Docs</text>
+    </g>
+
+    <!-- Card 4: 30-Day Hiring -->
+    <g transform="translate(0, 260)">
+      <rect width="345" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.25)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="35" fill="#D4AF37" font-size="14" text-anchor="middle">👥</text>
+      <text x="52" y="35" fill="#F3E5AB" font-size="13" font-weight="bold">4. HIRING &amp; EXPANSION</text>
+      <line x1="16" y1="54" x2="329" y2="54" stroke="rgba(212, 175, 55, 0.15)"/>
+
+      <text x="16" y="76" fill="#94A3B8" font-size="11" font-weight="600">HEADCOUNT &amp; ROLES</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5">
+        <tspan x="16" dy="0">• 45+ new senior engineering roles opened</tspan>
+        <tspan x="16" dy="16">  across Dublin &amp; Seattle specifically for</tspan>
+        <tspan x="16" dy="16">  low-latency cryptographic ledger nodes.</tspan>
+        <tspan x="16" dy="16">• Head of Enterprise AI Partnerships hired.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="160" height="22" rx="6" fill="#080B11" stroke="rgba(212, 175, 55, 0.2)"/>
+      <text x="96" y="195" fill="#94A3B8" font-size="10" text-anchor="middle">Tier 1: LinkedIn &bull; Careers</text>
+    </g>
+
+    <!-- Card 5: Discussion Hooks -->
+    <g transform="translate(365, 260)">
+      <rect width="345" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(212, 175, 55, 0.35)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(212, 175, 55, 0.15)"/>
+      <text x="30" y="35" fill="#D4AF37" font-size="14" text-anchor="middle">🎯</text>
+      <text x="52" y="35" fill="#F3E5AB" font-size="13" font-weight="bold">5. DISCUSSION HOOKS</text>
+      <line x1="16" y1="54" x2="329" y2="54" stroke="rgba(212, 175, 55, 0.15)"/>
+
+      <text x="16" y="76" fill="#D4AF37" font-size="11" font-weight="bold">TOP 3 STRATEGIC HOOKS</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5">
+        <tspan x="16" dy="0">1. Reference his podcast quote on AI</tspan>
+        <tspan x="16" dy="16">   primitives driving transaction volume.</tspan>
+        <tspan x="16" dy="16">2. Propose co-integration with their new</tspan>
+        <tspan x="16" dy="16">   Agentic Commerce SDK without churn risk.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="130" height="22" rx="6" fill="#080B11" stroke="rgba(212, 175, 55, 0.25)"/>
+      <text x="81" y="195" fill="#F3E5AB" font-size="10" font-weight="bold" text-anchor="middle">Strategic Leverage</text>
+    </g>
+
+    <!-- Card 6: Risk Blindspots -->
+    <g transform="translate(730, 260)">
+      <rect width="350" height="245" rx="16" fill="#101522" fill-opacity="0.85" stroke="rgba(248, 113, 113, 0.3)" stroke-width="1.2" filter="url(#shadowBox)"/>
+      <rect x="16" y="16" width="28" height="28" rx="8" fill="rgba(248, 113, 113, 0.15)"/>
+      <text x="30" y="35" fill="#F87171" font-size="14" text-anchor="middle">⚠️</text>
+      <text x="52" y="35" fill="#F87171" font-size="13" font-weight="bold">6. RISK BLINDSPOTS</text>
+      <line x1="16" y1="54" x2="334" y2="54" stroke="rgba(248, 113, 113, 0.2)"/>
+
+      <text x="16" y="76" fill="#F87171" font-size="11" font-weight="bold">TOP 3 CRITICAL RISKS</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="11.5">
+        <tspan x="16" dy="0">1. Regulatory scrutiny on stablecoin reserves</tspan>
+        <tspan x="16" dy="16">   in EU jurisdictions (MiCA compliance).</tspan>
+        <tspan x="16" dy="16">2. High churn sensitivity during their legacy</tspan>
+        <tspan x="16" dy="16">   v1 API migration deprecation cycle.</tspan>
+      </text>
+
+      <rect x="16" y="180" width="145" height="22" rx="6" fill="#080B11" stroke="rgba(248, 113, 113, 0.25)"/>
+      <text x="88" y="195" fill="#F87171" font-size="10" font-weight="bold" text-anchor="middle">Blindspot Safeguards</text>
+    </g>
+  </g>
+</svg>
